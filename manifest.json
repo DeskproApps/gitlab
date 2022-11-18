@@ -1,27 +1,50 @@
 {
-  "name": "@deskpro-apps/my_app",
-  "title": "My App",
-  "description": "My Deskpro app",
+  "name": "@deskpro-apps/gitlab",
+  "title": "GitLab",
+  "description": "View your GitLab issues from Deskpro and link them to tickets you are working on",
   "version": "1.0.0",
   "scope": "agent",
   "isSingleInstall": false,
+  "hasDevMode": true,
   "targets": [{
     "target": "ticket_sidebar",
     "entrypoint": "index.html"
   }],
+  "entityAssociations": {
+    "linkedGitlabIssue": {
+      "title": "Linked GitLab Issue",
+      "entity": "ticket",
+      "type": "external_id"
+    }
+  },
   "settings": {
-    "example": {
-      "title": "Example Setting",
-      "description": "Example backend only setting",
+    "app_id": {
+      "title": "Application ID",
+      "type": "string",
+      "isRequired": true,
+      "isBackendOnly": false,
+      "order": 10
+    },
+    "client_secret": {
+      "title": "Secret",
+      "type": "string",
+      "isRequired": true,
+      "isBackendOnly": true,
+      "order": 20
+    },
+    "gitlab_instance_url": {
+      "title": "GitLab Instance URL",
+      "description": "",
       "type": "string",
       "isRequired": false,
-      "isBackendOnly": true
+      "isBackendOnly": false,
+      "order": 30
     }
   },
   "proxy": {
     "whitelist": [{
       "url": "https://example.com/.*",
-      "methods": ["GET", "POST", "PUT"],
+      "methods": ["GET", "POST"],
       "timeout": 10
     }]
   }
