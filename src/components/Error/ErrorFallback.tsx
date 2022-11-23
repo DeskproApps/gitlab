@@ -8,7 +8,7 @@ type Props = Omit<FallbackProps, "error"> & {
     error: Error,
 };
 
-const errorFallbackRender: FC<Props> = ({ resetErrorBoundary, error }) => {
+const ErrorFallback: FC<Props> = ({ resetErrorBoundary, error }) => {
     const message = "There was an error!";
     const nativeErrorMessage = error.message;
 
@@ -32,4 +32,4 @@ const errorFallbackRender: FC<Props> = ({ resetErrorBoundary, error }) => {
     );
 };
 
-export { errorFallbackRender };
+export { ErrorFallback };
