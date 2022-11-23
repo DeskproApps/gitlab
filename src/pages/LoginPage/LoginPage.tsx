@@ -1,15 +1,49 @@
 import { FC } from "react";
-import { H3, useDeskproElements } from "@deskpro/app-sdk";
+import { useNavigate } from "react-router-dom";
+import get from "lodash/get";
+import {
+    H3,
+    useDeskproElements,
+    useDeskproLatestAppContext,
+    useInitialisedDeskproAppClient,
+} from "@deskpro/app-sdk";
 import { useLogin } from "./hooks";
+import { getEntityIssueListService } from "../../services/entityAssociation";
 import { Title, AnchorButton } from "../../components/common";
 import { ErrorBlock } from "../../components";
+import type { TicketContext } from "../../types";
 
 const LoginPage: FC = () => {
-    const { error, authLink, isLoading, onSignIn } = useLogin();
+    const navigate = useNavigate();
+    const { context } = useDeskproLatestAppContext() as { context: TicketContext };
+    const {
+        error,
+        isAuth,
+        authLink,
+        onSignIn,
+        isLoading,
+    } = useLogin();
+    const ticketId = get(context, ["data", "ticket", "id"]);
 
     useDeskproElements(({ deRegisterElement }) => {
         deRegisterElement("menu");
     });
+
+    /** redirect after authorized */
+    useInitialisedDeskproAppClient((client) => {
+        if (!ticketId || !isAuth) {
+            return;
+        }
+
+        getEntityIssueListService(client, ticketId)
+            .then((entities) => {
+                if (Array.isArray(entities) && entities.length > 0) {
+                    navigate("/home");
+                } else {
+                    navigate("/link");
+                }
+            })
+    }, [ticketId, isAuth]);
 
     if (error) {
         // eslint-disable-next-line no-console

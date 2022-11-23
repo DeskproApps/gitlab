@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { createSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import get from "lodash/get";
 import {
@@ -15,6 +15,7 @@ import {
 import { Maybe, TicketContext } from "../../types";
 
 type UseLogin = () => {
+    isAuth: boolean,
     authLink: string,
     isLoading: boolean,
     onSignIn: () => void,
@@ -22,11 +23,11 @@ type UseLogin = () => {
 };
 
 const useLogin: UseLogin = () => {
-    const navigate = useNavigate();
     const key = useMemo(() => uuidv4(), []);
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext() as { context: TicketContext };
 
+    const [isAuth, setIsAuth] = useState<boolean>(false);
     const [authLink, setAuthLink] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [callback, setCallback] = useState<OAuth2StaticCallbackUrl|undefined>();
@@ -47,9 +48,9 @@ const useLogin: UseLogin = () => {
             .then(({ access_token }) => client.setUserState(placeholders.TOKEN_PATH, access_token))
             .then(({ isSuccess, errors }) => isSuccess ? Promise.resolve() : Promise.reject(errors))
             .then(() => getCurrentUserService(client))
-            .then((data) => {
-                if (get(data, ["currentUser", "id"], null)) {
-                    navigate("/home");
+            .then((user) => {
+                if (get(user, ["id"], null)) {
+                    setIsAuth(true);
                 } else {
                     setError(new Error("Can't find current user"));
                     setIsLoading(false)
@@ -59,7 +60,7 @@ const useLogin: UseLogin = () => {
                 setIsLoading(false);
                 setError(err);
             });
-    }, [callback, client, setIsLoading, navigate]);
+    }, [callback, client, setIsLoading]);
 
     /** set callback */
     useEffect(() => {
@@ -70,7 +71,7 @@ const useLogin: UseLogin = () => {
         }
     }, [client, key, callback]);
 
-    /** Set authLink */
+    /** set authLink */
     useEffect(() => {
         if (appId && callbackUrl && key) {
             setAuthLink(`https://gitlab.com/oauth/authorize?${createSearchParams({
@@ -87,7 +88,7 @@ const useLogin: UseLogin = () => {
         }
     }, [callbackUrl, key, appId]);
 
-    return { error, authLink, onSignIn, isLoading };
+    return { isAuth, error, authLink, onSignIn, isLoading };
 };
 
 export { useLogin };

@@ -8,4 +8,6 @@ export const placeholders = {
 
 export const BASE_URL = "https://gitlab.com";
 
+export const REST_URL = `${BASE_URL}/api/v4`;
+
 export const GRAPHQL_URL = `${BASE_URL}/api/graphql`;

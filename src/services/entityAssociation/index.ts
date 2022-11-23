@@ -1,1 +1,1 @@
-export { getEntityCardListService } from "./getEntityIssueListService";
+export { getEntityIssueListService } from "./getEntityIssueListService";
