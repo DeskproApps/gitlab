@@ -79,7 +79,19 @@ const useLogin: UseLogin = () => {
                 redirect_uri: callbackUrl,
                 response_type: "code",
                 state: key,
-                scope: ["read_api"].join(" "),
+                scope: [
+                    "api",
+                    "read_api",
+                    "read_user",
+                    "read_repository",
+                    "write_repository",
+                    "read_registry",
+                    "write_registry",
+                    "sudo",
+                    "openid",
+                    "profile",
+                    "email",
+                ].join(" "),
             })}`);
             setIsLoading(false);
         } else {

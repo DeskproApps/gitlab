@@ -1,7 +1,10 @@
 import { FC } from "react";
 import { useDeskproElements } from "@deskpro/app-sdk";
+import { useLoadDependentData } from "./hooks";
 
 const HomePage: FC = () => {
+    const { issues } = useLoadDependentData();
+
     useDeskproElements(({ registerElement }) => {
         registerElement("menu", {
             type: "menu",

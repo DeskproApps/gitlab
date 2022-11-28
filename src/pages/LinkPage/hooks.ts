@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import isEmpty from "lodash/isEmpty";
 import uniq from "lodash/uniq";
-import {useQueriesWithClient, useQueryWithClient} from "../../hooks";
+import { useQueriesWithClient, useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { searchIssuesService, getProjectService } from "../../services/gitlab";
 import { debouncePromise, getOption } from "../../utils";
