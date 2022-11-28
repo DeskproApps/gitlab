@@ -9,7 +9,7 @@ import {
     useDeskproAppClient,
     useDeskproAppEvents,
 } from "@deskpro/app-sdk";
-import { Main, LoginPage, HomePage, LinkPage } from "./pages";
+import { Main, LoginPage, HomePage, LinkPage, AdminPage } from "./pages";
 import { ErrorFallback } from "./components";
 import { useLogout } from "./hooks";
 import type { EventPayload } from "./types";
@@ -53,6 +53,7 @@ const App = () => {
               {({ reset }) => (
                   <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
                       <Routes>
+                          <Route path="/admin/callback" element={<AdminPage/>} />
                           <Route path="/login" element={<LoginPage/>} />
                           <Route path="/home" element={<HomePage/>} />
                           <Route path="/link" element={<LinkPage/>} />
