@@ -27,6 +27,7 @@ const LoginPage: FC = () => {
 
     useDeskproElements(({ deRegisterElement }) => {
         deRegisterElement("menu");
+        deRegisterElement("plusButton");
     });
 
     /** redirect after authorized */

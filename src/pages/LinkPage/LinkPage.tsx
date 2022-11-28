@@ -34,7 +34,8 @@ const LinkPage: FC = () => {
 
     const ticketId = get(context, ["data", "ticket", "id"]);
 
-    useDeskproElements(({ registerElement }) => {
+    useDeskproElements(({ registerElement, deRegisterElement }) => {
+        deRegisterElement("plusButton");
         registerElement("menu", {
             type: "menu",
             items: [{

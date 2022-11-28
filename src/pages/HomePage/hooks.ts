@@ -54,7 +54,7 @@ const useLoadDependentData: UseLoadDependentData = () => {
         return {
             queryKey: [QueryKey.PROJECTS, projectId],
             queryFn: (client) => getProjectService(client, projectId),
-            enabled: Boolean(projectId),
+            enabled: Boolean(projectId) && issues.every(({ isFetched }) => isFetched),
             select: (data) => getOption<Issue["project_id"]>(data.id, data.name),
         }
     }));
@@ -64,8 +64,8 @@ const useLoadDependentData: UseLoadDependentData = () => {
             ...issues,
             ...projects,
         ].every(({ isLoading }) => isLoading),
-        issues: issues?.filter(({ data }) => Boolean(data))?.map(({ data }) => data) || [],
-        projectOptions: projects?.filter((p) => Boolean(p)).map(({ data }) => data) || [],
+        issues: issues?.filter(({ data }) => Boolean(data)).map(({ data }) => data) || [],
+        projectOptions: projects?.filter(({ data }) => Boolean(data)).map(({ data }) => data) || [],
     };
 };
 

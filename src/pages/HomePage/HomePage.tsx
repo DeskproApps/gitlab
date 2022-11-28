@@ -18,6 +18,10 @@ const HomePage: FC = () => {
                 payload: { type: "logout" },
             }],
         });
+        registerElement("plusButton", {
+            type: "plus_button",
+            payload: { type: "changePage", path: "/link" },
+        });
     });
 
     if (isLoading) {
