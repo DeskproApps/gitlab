@@ -4,7 +4,7 @@ import type { Issue } from "./types";
 
 const getProjectService = (
     client: IDeskproClient,
-    projectId: Issue["project_id"],
+    projectId: Issue["project_id"]|string,
 ) => {
     return baseRequest(client, {
         url: `/projects/${projectId}`,

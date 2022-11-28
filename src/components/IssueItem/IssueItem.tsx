@@ -62,7 +62,7 @@ const Assignees: FC<{ assignees?: Issue["assignees"] }> = ({ assignees }) => {
 const IssueItem: FC<{
     issue: Issue,
     projects: Array<Option<string|Issue["project_id"]>>
-    onClickTitle: () => void,
+    onClickTitle?: () => void,
 }> = ({
     issue: {
         id,
@@ -83,7 +83,7 @@ const IssueItem: FC<{
 
     const onClick = (e: MouseEvent) => {
         e.preventDefault();
-        onClickTitle();
+        onClickTitle && onClickTitle();
     };
 
     useInitialisedDeskproAppClient((client) => {
@@ -93,11 +93,10 @@ const IssueItem: FC<{
     return (
         <>
             <Title
-                title={(
-                    <TitleLink href="#" onClick={onClick}>
-                        {title}
-                    </TitleLink>
-                )}
+                title={!onClickTitle
+                    ? title
+                    : (<TitleLink href="#" onClick={onClick}>{title}</TitleLink>)
+                }
                 link={web_url}
             />
             <TwoProperties

@@ -84,7 +84,7 @@ const LinkIssue: FC<Props> = ({
             {!Array.isArray(issues)
                 ? (<NoFound/>)
                 : issues.length === 0
-                ? (<NoFound text="No GitHub issues found" />)
+                ? (<NoFound text="No GitLab issues found" />)
                 : issues.map((issue) => (
                         <Fragment key={issue.id}>
                             <Card>

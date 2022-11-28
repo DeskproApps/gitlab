@@ -9,7 +9,7 @@ import {
 import { LinkIssue } from "../../components";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
-import { getOption } from "../../utils";
+import { getOption, normalize } from "../../utils";
 import type { Option } from "../../types";
 import type { Issue } from "../../services/gitlab/types";
 
@@ -79,9 +79,19 @@ const LinkPage: FC = () => {
             return;
         }
 
+        const issuesMap = normalize(issues);
+        const selectedEntities: string[] = selectedIssues
+            .map((issueId) => {
+                const issue = get(issuesMap, [issueId], null);
+                if (issue) {
+                    return `${issue.project_id}:${issue.iid}`;
+                }
+            })
+            .filter((entity) => Boolean(entity)) as string[];
+
         Promise
-            .all(selectedIssues.map((issueId) =>
-                setEntityIssueService(client, ticketId, issueId)
+            .all(selectedEntities.map((entity) =>
+                setEntityIssueService(client, ticketId, entity)
             ))
             .then(() => navigate("/home"))
     };
