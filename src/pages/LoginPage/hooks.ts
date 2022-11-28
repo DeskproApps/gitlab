@@ -80,17 +80,9 @@ const useLogin: UseLogin = () => {
                 response_type: "code",
                 state: key,
                 scope: [
-                    "api",
                     "read_api",
-                    "read_user",
                     "read_repository",
-                    "write_repository",
                     "read_registry",
-                    "write_registry",
-                    "sudo",
-                    "openid",
-                    "profile",
-                    "email",
                 ].join(" "),
             })}`);
             setIsLoading(false);
