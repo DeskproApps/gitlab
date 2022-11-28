@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Context, IDeskproClient } from "@deskpro/app-sdk";
 
 export type Maybe<T> = T | undefined | null;
@@ -9,20 +10,66 @@ export type Dict<T> = Record<string, T>;
  */
 export type DateTime = string;
 
+// ToDo: change to DropdownValueType from @deskpro/deskpro-ui
+export type Option<Value> = {
+    value: Value,
+    key: Value,
+    label: ReactNode,
+    type: "value",
+};
+
 export type Settings = {
     app_id: string,
     gitlab_instance_url: Maybe<string>,
 };
 
 export type TicketData = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    env: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    app: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ticket: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    currentAgent: any,
+    env: {
+        envId: string,
+        release: string,
+        releaseBuildTime: number,
+    },
+    app: {
+        id: string,
+        instanceId: string,
+        description: string,
+        name: "@deskpro-apps/gitlab"
+        title: "GitLab",
+    },
+    ticket: {
+        id: string,
+        subject: string,
+        permalinkUrl: string,
+        primaryUser: {
+            customFields: object,
+            displayName: string,
+            email: string,
+            emails: string[],
+            firstName: string,
+            id: string,
+            language: string,
+            lastName: string,
+            locale: string,
+        },
+    },
+    currentAgent: {
+        avatarUrl: string,
+        emails: string[],
+        firstName: string,
+        id: string,
+        isAdmin: boolean,
+        isAgent: boolean,
+        isChatOnline: boolean,
+        isOnline: boolean,
+        language: string,
+        lastName: string,
+        locale: string,
+        name: string,
+        primaryEmail: string,
+        teams: Array<{ id: string, name: string }>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        userGroups: any[],
+    },
 };
 
 export type TicketContext = Context<TicketData, Maybe<Settings>>;

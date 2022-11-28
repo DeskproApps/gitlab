@@ -61,6 +61,7 @@ const App = () => {
                   </ErrorBoundary>
               )}
             </QueryErrorResetBoundary>
+            <br/><br/><br/>
         </Suspense>
     );
 };

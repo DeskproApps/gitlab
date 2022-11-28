@@ -9,7 +9,7 @@ import {
 } from "@deskpro/app-sdk";
 import { useLogin } from "./hooks";
 import { getEntityIssueListService } from "../../services/entityAssociation";
-import { Title, AnchorButton } from "../../components/common";
+import { Title, AnchorButton, Container } from "../../components/common";
 import { ErrorBlock } from "../../components";
 import type { TicketContext } from "../../types";
 
@@ -42,7 +42,7 @@ const LoginPage: FC = () => {
                 } else {
                     navigate("/link");
                 }
-            })
+            });
     }, [ticketId, isAuth]);
 
     if (error) {
@@ -51,7 +51,7 @@ const LoginPage: FC = () => {
     }
 
     return (
-        <>
+        <Container>
             <Title as={H3} title="Log into your GitLab Account" />
             {error && <ErrorBlock text="An error occurred, please try again."/>}
             <AnchorButton
@@ -62,7 +62,7 @@ const LoginPage: FC = () => {
                 loading={isLoading}
                 disabled={isLoading}
             />
-        </>
+        </Container>
     );
 };
 
