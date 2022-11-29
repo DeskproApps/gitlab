@@ -65,7 +65,6 @@ const IssueItem: FC<{
     onClickTitle?: () => void,
 }> = ({
     issue: {
-        id,
         iid,
         title,
         web_url,
@@ -87,7 +86,7 @@ const IssueItem: FC<{
     };
 
     useInitialisedDeskproAppClient((client) => {
-        getEntityAssociationCountService(client, `${id}`).then(setTicketCount);
+        getEntityAssociationCountService(client, `${project_id}:${iid}`).then(setTicketCount);
     });
 
     return (

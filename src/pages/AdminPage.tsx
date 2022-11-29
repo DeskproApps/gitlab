@@ -14,19 +14,13 @@ import {
 
 const AdminPage: FC = () => {
     const { theme } = useDeskproAppTheme();
-    const [ callbackUrl, setCallbackUrl ] = useState<string|null>(null);
+    const [callbackUrl, setCallbackUrl] = useState<string|null>(null);
     const key = useMemo(() => uuidv4(), []);
 
     useInitialisedDeskproAppClient((client) => {
-        (async () => {
-            const { callbackUrl } = await client.oauth2().getAdminGenericCallbackUrl(
-                key,
-                /\?code=(?<token>.+?)&/,
-                /&state=(?<key>.+)/
-            );
-
-            setCallbackUrl(callbackUrl);
-        })();
+        client.oauth2()
+            .getAdminGenericCallbackUrl(key, /code=(?<token>[0-9a-f]+)/, /state=(?<key>.+)/)
+            .then(({ callbackUrl }) => setCallbackUrl(callbackUrl));
     }, [key]);
 
     if (!callbackUrl) {
@@ -37,7 +31,6 @@ const AdminPage: FC = () => {
         <>
             <H2 style={{ marginBottom: "5px" }}>Callback URL</H2>
             <Stack
-                className="global-sign-in container-callback"
                 style={{ borderColor: theme.colors.brandShade40, color: theme.colors.grey100 }}
                 justify="space-between"
                 align="center"
@@ -46,7 +39,7 @@ const AdminPage: FC = () => {
                     {callbackUrl}
                 </div>
                 <CopyToClipboard text={callbackUrl}>
-                    <Button text="Copy" icon={faCopy} intent="secondary" style={{ width: "72px" }} />
+                    <Button text="Copy" icon={faCopy} intent="secondary"/>
                 </CopyToClipboard>
             </Stack>
             <P1 style={{ marginBottom: "16px", marginTop: "8px", color: theme.colors.grey80 }}>
