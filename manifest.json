@@ -2,7 +2,7 @@
   "name": "@deskpro-apps/gitlab",
   "title": "GitLab",
   "description": "View your GitLab issues from Deskpro and link them to tickets you are working on.",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "scope": "agent",
   "isSingleInstall": false,
   "hasDevMode": true,
@@ -44,7 +44,7 @@
       "title": "",
       "type": "app_embedded",
       "options": {
-        "entrypoint": "#/admin/callback"
+        "entrypoint": "http://localhost:3001/#/admin/callback"
       },
       "isRequired": false,
       "isBackendOnly": false,
@@ -53,7 +53,7 @@
   },
   "proxy": {
     "whitelist": [{
-      "url": "https://__gitlab_instance_url__/.*",
+      "url": "__gitlab_instance_url__/.*",
       "methods": ["GET", "POST"],
       "timeout": 10
     }]
