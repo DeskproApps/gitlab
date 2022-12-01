@@ -34,7 +34,7 @@
     },
     "gitlab_instance_url": {
       "title": "GitLab Instance URL",
-      "description": "",
+      "description": "Enter the URL of your GitLab instance or https://gitlab.com if you are using one",
       "type": "string",
       "validationPattern": "^https?:",
       "isRequired": true,
