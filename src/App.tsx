@@ -50,17 +50,20 @@ const App = () => {
     return (
         <Suspense fallback={<LoadingSpinner/>}>
             <QueryErrorResetBoundary>
-              {({ reset }) => (
-                  <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
-                      <Routes>
-                          <Route path="/admin/callback" element={<AdminPage/>} />
-                          <Route path="/login" element={<LoginPage/>} />
-                          <Route path="/home" element={<HomePage/>} />
-                          <Route path="/link" element={<LinkPage/>} />
-                          <Route index element={<Main/>} />
-                      </Routes>
-                  </ErrorBoundary>
-              )}
+              {({ reset }) => {
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  return (<ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
+                          <Routes>
+                              <Route path="/admin/callback" element={<AdminPage/>} />
+                              <Route path="/login" element={<LoginPage/>} />
+                              <Route path="/home" element={<HomePage/>} />
+                              <Route path="/link" element={<LinkPage/>} />
+                              <Route index element={<Main/>} />
+                          </Routes>
+                      </ErrorBoundary>
+                  )
+              }}
             </QueryErrorResetBoundary>
             <br/><br/><br/>
         </Suspense>

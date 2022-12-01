@@ -34,6 +34,7 @@ const useLogin: UseLogin = () => {
     const [error, setError] = useState<Maybe<Error>>(null);
 
     const appId = get(context, ["settings", "app_id"]);
+    const gitlabInstanceUrl = get(context, ["settings", "gitlab_instance_url"]);
     const callbackUrl = get(callback, ["callbackUrl"]);
 
     const onSignIn = useCallback(() => {
@@ -73,20 +74,20 @@ const useLogin: UseLogin = () => {
 
     /** set authLink */
     useEffect(() => {
-        if (appId && callbackUrl && key) {
-            setAuthLink(`https://gitlab.com/oauth/authorize?${createSearchParams({
-                client_id: appId,
-                redirect_uri: callbackUrl,
-                response_type: "code",
-                state: key,
-                scope: ["read_api"].join(" "),
-            })}`);
+        if (appId && gitlabInstanceUrl && callbackUrl && key) {
+            setAuthLink(`${gitlabInstanceUrl}/oauth/authorize?${createSearchParams([
+                ["client_id", appId],
+                ["redirect_uri", callbackUrl],
+                ["response_type", "code"],
+                ["state", key],
+                ["scope", ["read_api"].join(" ")],
+            ])}`);
             setIsLoading(false);
         } else {
             setAuthLink("");
             setIsLoading(true);
         }
-    }, [callbackUrl, key, appId]);
+    }, [callbackUrl, key, appId, gitlabInstanceUrl]);
 
     return { isAuth, error, authLink, onSignIn, isLoading };
 };

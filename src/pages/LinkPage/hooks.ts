@@ -39,6 +39,8 @@ const useSearch: UseSearch = (q) => {
         queryKey: [QueryKey.PROJECTS, projectId],
         queryFn: (client) => getProjectService(client, projectId),
         enabled: Boolean(projectId),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         select: (data) => getOption<Issue["project_id"]>(data.id, data.name),
     })));
 
