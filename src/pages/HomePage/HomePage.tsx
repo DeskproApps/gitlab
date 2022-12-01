@@ -1,6 +1,7 @@
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import {
     LoadingSpinner,
+    HorizontalDivider,
     useDeskproElements,
 } from "@deskpro/app-sdk";
 import { useLoadDependentData } from "./hooks";
@@ -33,7 +34,10 @@ const HomePage: FC = () => {
     return (
         <Container>
             {issues.map((issue) => (
-                <IssueItem key={issue.id} issue={issue} projects={projectOptions} />
+                <Fragment key={issue.id}>
+                    <IssueItem issue={issue} projects={projectOptions} />
+                    <HorizontalDivider style={{ margin: "10px 0" }} />
+                </Fragment>
             ))}
         </Container>
     )
