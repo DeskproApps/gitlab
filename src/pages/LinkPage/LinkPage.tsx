@@ -9,7 +9,7 @@ import {
 import { LinkIssue } from "../../components";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
-import { getOption, normalize } from "../../utils";
+import { getOption, getEntityId } from "../../utils";
 import type { Option } from "../../types";
 import type { Issue } from "../../services/gitlab/types";
 
@@ -27,7 +27,7 @@ const LinkPage: FC = () => {
     const { context } = useDeskproLatestAppContext();
 
     const [search, setSearch] = useState<string>("");
-    const [selectedIssues, setSelectedIssues] = useState<Array<Issue["id"]>>([]);
+    const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
     const [selectedProject, setSelectedProject] = useState<Option<string|Issue["project_id"]>>(getOption("any", "Any"));
 
     const { isLoading, isFetching, issues, projectOptions } = useSearch(search);
@@ -61,12 +61,12 @@ const LinkPage: FC = () => {
         setSelectedProject(option);
     };
 
-    const onChangeSelectedIssue = (issueId: Issue["id"]) => {
+    const onChangeSelectedIssue = (issue: Issue) => {
         let newSelectedIssues = [...selectedIssues];
-        if (selectedIssues.includes(issueId)) {
-            newSelectedIssues = selectedIssues.filter((selectedIssueId) => selectedIssueId !== issueId);
+        if (selectedIssues.includes(getEntityId(issue))) {
+            newSelectedIssues = selectedIssues.filter((selectedIssueId) => selectedIssueId !== getEntityId(issue));
         } else {
-            newSelectedIssues.push(issueId);
+            newSelectedIssues.push(getEntityId(issue));
         }
         setSelectedIssues(newSelectedIssues);
     };
@@ -80,18 +80,8 @@ const LinkPage: FC = () => {
             return;
         }
 
-        const issuesMap = normalize(issues);
-        const selectedEntities: string[] = selectedIssues
-            .map((issueId) => {
-                const issue = get(issuesMap, [issueId], null);
-                if (issue) {
-                    return `${issue.project_id}:${issue.iid}`;
-                }
-            })
-            .filter((entity) => Boolean(entity)) as string[];
-
         Promise
-            .all(selectedEntities.map((entity) =>
+            .all(selectedIssues.map((entity) =>
                 setEntityIssueService(client, ticketId, entity)
             ))
             .then(() => navigate("/home"))
