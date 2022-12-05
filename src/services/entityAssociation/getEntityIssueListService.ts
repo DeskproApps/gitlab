@@ -1,7 +1,7 @@
 import { IDeskproClient } from "@deskpro/app-sdk";
 import { ENTITY_GITLAB_ISSUE } from "./constants";
 
-const getEntityCardListService = (
+const getEntityIssueListService = (
     client: IDeskproClient,
     ticketId: string,
 ): Promise<string[]> => {
@@ -10,4 +10,4 @@ const getEntityCardListService = (
         .list();
 };
 
-export { getEntityCardListService };
+export { getEntityIssueListService };

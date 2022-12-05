@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            suspense: true,
+            suspense: false,
             useErrorBoundary: true,
             refetchOnWindowFocus: false,
         },
@@ -11,7 +11,9 @@ const queryClient = new QueryClient({
 });
 
 enum QueryKey {
-    //..
+    SEARCH_ISSUES = "searchIssues",
+    PROJECTS = "projects",
+    ISSUES = "issues",
 }
 
 export { queryClient, QueryKey };

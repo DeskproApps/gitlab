@@ -5,7 +5,7 @@ import {
     useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { getCurrentUserService } from "../../services/gitlab";
-import { getEntityCardListService } from "../../services/entityAssociation";
+import { getEntityIssueListService } from "../../services/entityAssociation";
 import type { TicketContext } from "../../types";
 
 const useCheckLinkedIssues = () => {
@@ -19,14 +19,15 @@ const useCheckLinkedIssues = () => {
         }
 
         const isAuth = await getCurrentUserService(client)
-            .then((data) => Boolean(get(data, ["currentUser", "id"], null)))
+            .then((user) => Boolean(get(user, ["id"], null)))
+            .catch(() => false)
 
         if (!isAuth) {
             navigate("/login");
             return;
         }
 
-        const entities = await getEntityCardListService(client, ticketId);
+        const entities = await getEntityIssueListService(client, ticketId);
 
         if (Array.isArray(entities) && entities.length > 0) {
             navigate("/home");

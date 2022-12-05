@@ -6,6 +6,6 @@ export const placeholders = {
     TOKEN_PATH: "oauth2/token",
 };
 
-export const BASE_URL = "https://gitlab.com";
+export const BASE_URL = "__gitlab_instance_url__";
 
-export const GRAPHQL_URL = `${BASE_URL}/api/graphql`;
+export const REST_URL = `${BASE_URL}/api/v4`;

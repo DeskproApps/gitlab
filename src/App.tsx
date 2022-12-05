@@ -9,7 +9,7 @@ import {
     useDeskproAppClient,
     useDeskproAppEvents,
 } from "@deskpro/app-sdk";
-import { Main, LoginPage, HomePage, LinkPage } from "./pages";
+import { Main, LoginPage, HomePage, LinkPage, AdminPage } from "./pages";
 import { ErrorFallback } from "./components";
 import { useLogout } from "./hooks";
 import type { EventPayload } from "./types";
@@ -50,17 +50,22 @@ const App = () => {
     return (
         <Suspense fallback={<LoadingSpinner/>}>
             <QueryErrorResetBoundary>
-              {({ reset }) => (
-                  <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
-                      <Routes>
-                          <Route path="/login" element={<LoginPage/>} />
-                          <Route path="/home" element={<HomePage/>} />
-                          <Route path="/link" element={<LinkPage/>} />
-                          <Route index element={<Main/>} />
-                      </Routes>
-                  </ErrorBoundary>
-              )}
+              {({ reset }) => {
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  return (<ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
+                          <Routes>
+                              <Route path="/admin/callback" element={<AdminPage/>} />
+                              <Route path="/login" element={<LoginPage/>} />
+                              <Route path="/home" element={<HomePage/>} />
+                              <Route path="/link" element={<LinkPage/>} />
+                              <Route index element={<Main/>} />
+                          </Routes>
+                      </ErrorBoundary>
+                  )
+              }}
             </QueryErrorResetBoundary>
+            <br/><br/><br/>
         </Suspense>
     );
 };

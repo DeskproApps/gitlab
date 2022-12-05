@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { createSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import get from "lodash/get";
 import {
@@ -15,6 +15,7 @@ import {
 import { Maybe, TicketContext } from "../../types";
 
 type UseLogin = () => {
+    isAuth: boolean,
     authLink: string,
     isLoading: boolean,
     onSignIn: () => void,
@@ -22,17 +23,18 @@ type UseLogin = () => {
 };
 
 const useLogin: UseLogin = () => {
-    const navigate = useNavigate();
     const key = useMemo(() => uuidv4(), []);
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext() as { context: TicketContext };
 
+    const [isAuth, setIsAuth] = useState<boolean>(false);
     const [authLink, setAuthLink] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [callback, setCallback] = useState<OAuth2StaticCallbackUrl|undefined>();
     const [error, setError] = useState<Maybe<Error>>(null);
 
     const appId = get(context, ["settings", "app_id"]);
+    const gitlabInstanceUrl = get(context, ["settings", "gitlab_instance_url"]);
     const callbackUrl = get(callback, ["callbackUrl"]);
 
     const onSignIn = useCallback(() => {
@@ -44,12 +46,12 @@ const useLogin: UseLogin = () => {
         setTimeout(() => setIsLoading(true), 1000);
         callback.poll()
             .then(({ token }) => getAccessTokenService(client, token, callback.callbackUrl))
-            .then(({ access_token }) => client.setUserState(placeholders.TOKEN_PATH, access_token))
+            .then(({ access_token }) => client.setUserState(placeholders.TOKEN_PATH, access_token, { backend: true }))
             .then(({ isSuccess, errors }) => isSuccess ? Promise.resolve() : Promise.reject(errors))
             .then(() => getCurrentUserService(client))
-            .then((data) => {
-                if (get(data, ["currentUser", "id"], null)) {
-                    navigate("/home");
+            .then((user) => {
+                if (get(user, ["id"], null)) {
+                    setIsAuth(true);
                 } else {
                     setError(new Error("Can't find current user"));
                     setIsLoading(false)
@@ -59,7 +61,7 @@ const useLogin: UseLogin = () => {
                 setIsLoading(false);
                 setError(err);
             });
-    }, [callback, client, setIsLoading, navigate]);
+    }, [callback, client, setIsLoading]);
 
     /** set callback */
     useEffect(() => {
@@ -70,24 +72,24 @@ const useLogin: UseLogin = () => {
         }
     }, [client, key, callback]);
 
-    /** Set authLink */
+    /** set authLink */
     useEffect(() => {
-        if (appId && callbackUrl && key) {
-            setAuthLink(`https://gitlab.com/oauth/authorize?${createSearchParams({
-                client_id: appId,
-                redirect_uri: callbackUrl,
-                response_type: "code",
-                state: key,
-                scope: ["read_api"].join(" "),
-            })}`);
+        if (appId && gitlabInstanceUrl && callbackUrl && key) {
+            setAuthLink(`${gitlabInstanceUrl}/oauth/authorize?${createSearchParams([
+                ["client_id", appId],
+                ["redirect_uri", callbackUrl],
+                ["response_type", "code"],
+                ["state", key],
+                ["scope", ["read_api"].join(" ")],
+            ])}`);
             setIsLoading(false);
         } else {
             setAuthLink("");
             setIsLoading(true);
         }
-    }, [callbackUrl, key, appId]);
+    }, [callbackUrl, key, appId, gitlabInstanceUrl]);
 
-    return { error, authLink, onSignIn, isLoading };
+    return { isAuth, error, authLink, onSignIn, isLoading };
 };
 
 export { useLogin };

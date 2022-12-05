@@ -5,7 +5,7 @@ import { H1, Stack, Button } from "@deskpro/app-sdk";
 import { GitlabLink } from "../GitlabLink";
 
 type Props = {
-    title: string | ReactNode,
+    title: ReactNode,
     link?: string,
     onClick?: () => void,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
