@@ -46,7 +46,7 @@ const useLogin: UseLogin = () => {
         setTimeout(() => setIsLoading(true), 1000);
         callback.poll()
             .then(({ token }) => getAccessTokenService(client, token, callback.callbackUrl))
-            .then(({ access_token }) => client.setUserState(placeholders.TOKEN_PATH, access_token))
+            .then(({ access_token }) => client.setUserState(placeholders.TOKEN_PATH, access_token, { backend: true }))
             .then(({ isSuccess, errors }) => isSuccess ? Promise.resolve() : Promise.reject(errors))
             .then(() => getCurrentUserService(client))
             .then((user) => {
