@@ -1,38 +1,18 @@
 import { FC, useState, MouseEvent } from "react";
 import styled from "styled-components";
-import { match } from "ts-pattern";
 import get from "lodash/get";
-import capitalize from "lodash/capitalize";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Avatar } from "@deskpro/deskpro-ui";
 import {
     P5,
-    Pill,
     Stack,
-    useDeskproAppTheme,
     useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { Title, Property, TwoProperties } from "../common";
+import { State, Title, Property, TwoProperties } from "../common";
 import { format } from "../../utils/date";
 import { getEntityAssociationCountService } from "../../services/entityAssociation";
 import type { Option } from "../../types";
 import type { Issue } from "../../services/gitlab/types";
-
-const State: FC<{ state?: "opened"|"closed" }> = ({ state }) => {
-    const { theme } = useDeskproAppTheme();
-    const [bg, label] = match(state)
-        .with("opened", () => [theme.colors.green100, "Open"])
-        .with("closed", () => [theme.colors.cyan100, "Closed"])
-        .otherwise(() => [theme.colors.grey80, capitalize(state)])
-
-    return (
-        <Pill
-            label={label}
-            textColor={theme.colors.white}
-            backgroundColor={bg}
-        />
-    );
-};
 
 const TitleLink = styled.a`
     color: ${({ theme }) => theme.colors.cyan100};

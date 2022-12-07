@@ -9,3 +9,7 @@ export { Loading } from "./Loading";
 export { NoFound } from "./NoFound";
 export { Property, TwoProperties } from "./Property";
 export { Card, CardMedia, CardBody } from "./Card";
+export { State } from "./State";
+export { Member } from "./Member";
+export { IssueLabel } from "./IssueLabel";
+export { IconLink } from "./Link";

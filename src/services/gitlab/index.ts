@@ -4,3 +4,5 @@ export { getCurrentUserService } from "./getCurrentUserService";
 export { searchIssuesService } from "./searchIssuesService";
 export { getProjectService } from "./getProjectService";
 export { getIssueService } from "./getIssueService";
+export { getIssueCommentsService } from "./getIssueCommentsService";
+export { getIssueMergeRequestsService } from "./getIssueMergeRequestsService";

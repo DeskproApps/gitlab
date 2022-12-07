@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Context, IDeskproClient } from "@deskpro/app-sdk";
+import type { Issue } from "./services/gitlab/types";
 
 export type Maybe<T> = T | undefined | null;
 
@@ -76,12 +77,6 @@ export type TicketContext = Context<TicketData, Maybe<Settings>>;
 
 export type ApiRequestMethod = "GET" | "POST";
 
-/*export type RequestParams = {
-    query: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    variables?: Record<string, any>
-};*/
-
 export type RequestParams = {
     url: string,
     method?: ApiRequestMethod,
@@ -99,4 +94,8 @@ export type Request = <T>(
 export type EventPayload =
     | { type: "changePage", path: string }
     | { type: "logout" }
+    | { type: "unlinkIssue", params: {
+        issueIid: Issue["iid"],
+        projectId: Issue["project_id"],
+    }}
 ;
