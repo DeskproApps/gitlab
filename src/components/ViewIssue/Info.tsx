@@ -1,4 +1,5 @@
 import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
 import { P5, Stack } from "@deskpro/app-sdk";
 import { format } from "../../utils/date";
 import { mdToHtml } from "../../utils";
@@ -70,7 +71,7 @@ const Info: FC<Pick<Props, "issue"|"project">> = ({ issue, project }) => {
                 label="Assignees"
                 text={(
                     <>
-                        {issue?.assignees?.map((assignee) => (
+                        {isEmpty(issue?.assignees) ? "-" : issue?.assignees?.map((assignee) => (
                             <Member
                                 key={assignee.username}
                                 name={assignee.name}
@@ -84,7 +85,7 @@ const Info: FC<Pick<Props, "issue"|"project">> = ({ issue, project }) => {
                 label="Labels"
                 text={(
                     <Stack wrap="wrap" gap={6}>
-                        {(issue?.labels || []).map((label) => (
+                        {isEmpty(issue?.labels) ? "-" : (issue?.labels || []).map((label) => (
                             <IssueLabel key={label.id} {...label} />
                         ))}
                     </Stack>

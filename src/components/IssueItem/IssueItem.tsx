@@ -1,6 +1,7 @@
 import { FC, useState, MouseEvent } from "react";
 import styled from "styled-components";
 import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Avatar } from "@deskpro/deskpro-ui";
 import {
@@ -8,7 +9,12 @@ import {
     Stack,
     useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { State, Title, Property, TwoProperties } from "../common";
+import {
+    State,
+    Title,
+    Property,
+    IssueLabel,
+    TwoProperties,} from "../common";
 import { format } from "../../utils/date";
 import { getEntityAssociationCountService } from "../../services/entityAssociation";
 import type { Option } from "../../types";
@@ -52,6 +58,7 @@ const IssueItem: FC<{
         project_id,
         assignees,
         state,
+        labels,
     } = {},
     projects,
     onClickTitle,
@@ -94,6 +101,17 @@ const IssueItem: FC<{
             <Property
                 label="Asignees"
                 text={<Assignees assignees={assignees} />}
+            />
+            <Property
+                label="Labels"
+                text={(
+                    <Stack wrap="wrap" gap={6}>
+                        {isEmpty(labels) ? "-" : (labels || []).map((label) => (
+                            <IssueLabel key={label.id} {...label} />
+                        ))}
+                    </Stack>
+
+                )}
             />
             <Property
                 label="Deskpro Tickets"
