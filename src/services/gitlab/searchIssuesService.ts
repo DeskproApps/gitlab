@@ -10,6 +10,7 @@ const searchIssuesService = (
         url: "/issues",
         queryParams: {
             search: q,
+            with_labels_details: "true",
         }
     });
 };
