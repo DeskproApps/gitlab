@@ -7,6 +7,7 @@ import {
     useDeskproLatestAppContext,
     useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { useSetTitle } from "../../hooks";
 import { useLogin } from "./hooks";
 import { getEntityIssueListService } from "../../services/entityAssociation";
 import { Title, AnchorButton, Container } from "../../components/common";
@@ -25,7 +26,10 @@ const LoginPage: FC = () => {
     } = useLogin();
     const ticketId = get(context, ["data", "ticket", "id"]);
 
+    useSetTitle("Log In");
+
     useDeskproElements(({ deRegisterElement }) => {
+        deRegisterElement("home");
         deRegisterElement("menu");
         deRegisterElement("plusButton");
     });

@@ -1,13 +1,13 @@
 import { FC } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Property } from "./Property";
 import type { Props as PropertyProps } from "./types";
 
 export type Props = {
-    leftLabel: PropertyProps["label"],
-    leftText: PropertyProps["text"],
-    rightLabel: PropertyProps["label"],
-    rightText: PropertyProps["text"],
+    leftLabel?: PropertyProps["label"],
+    leftText?: PropertyProps["text"],
+    rightLabel?: PropertyProps["label"],
+    rightText?: PropertyProps["text"],
 };
 
 const Container = styled.div`
@@ -15,31 +15,34 @@ const Container = styled.div`
     margin-bottom: -1px;
 `;
 
-const Side = styled.div`
+const Side = styled.div<{ withDivider?: boolean }>`
     display: inline-block;
-    width: calc(49% - 6px);
-`;
+    margin-bottom: 10px;
 
-const Divider = styled.div`
-    display: inline-block;
-    width: 1px;
-    height: 2em;
-    background-color: ${({ theme }) => theme.colors.grey20};
-    margin: 0 6px;
+    ${({ withDivider }) => withDivider
+        ? css`
+              calc(49% - 6px - 11px);
+              padding-left: 10px;
+              border-left: 1px solid ${({ theme }) => theme.colors.grey20};
+        `
+        : css`
+              width:calc(49% - 6px);
+        `
+    }
 `;
-
 
 const TwoProperties: FC<Props> = ({ leftLabel, leftText, rightLabel, rightText }) => (
     <Container>
         <Side>
             <Property
+                marginBottom={0}
                 label={leftLabel}
                 text={leftText}
             />
         </Side>
-        <Divider />
-        <Side>
+        <Side withDivider>
             <Property
+                marginBottom={0}
                 label={rightLabel}
                 text={rightText}
             />

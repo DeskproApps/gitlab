@@ -1,12 +1,12 @@
 import { baseRequest } from "./baseRequest";
 import type { IDeskproClient } from "@deskpro/app-sdk";
-import type { Issue } from "./types";
+import type { Project } from "./types";
 
 const getProjectService = (
     client: IDeskproClient,
-    projectId: Issue["project_id"]|string,
+    projectId: Project["id"]|string,
 ) => {
-    return baseRequest(client, {
+    return baseRequest<Project>(client, {
         url: `/projects/${projectId}`,
     });
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import {
     useDeskproLatestAppContext,
@@ -6,16 +7,19 @@ import {
 } from "@deskpro/app-sdk";
 import { QueryKey } from "../../query";
 import { getEntityIssueListService } from "../../services/entityAssociation";
-import { getIssueService, getProjectService } from "../../services/gitlab";
+import {
+    getIssueService,
+    getProjectService,
+} from "../../services/gitlab";
 import { useQueriesWithClient } from "../../hooks";
 import { getOption } from "../../utils";
-import type { Issue } from "../../services/gitlab/types";
+import type { Issue, Project } from "../../services/gitlab/types";
 import type { TicketContext, Option } from "../../types";
 
 type UseLoadDependentData = () => {
     isLoading: boolean,
     issues: Issue[],
-    projectOptions: Array<Option<Issue["project_id"]>>,
+    projectOptions: Array<Option<Project["id"]>>,
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -36,13 +40,14 @@ const useLoadDependentData: UseLoadDependentData = () => {
             .catch(() => {});
     });
 
-    const issues = useQueriesWithClient(entityIds.map((entity) => {
+    const issues = useQueriesWithClient<Issue>(entityIds.map((entity) => {
         const [projectId, issueIid] = entity.split(":");
 
         return {
             queryKey: [QueryKey.ISSUES, projectId, issueIid],
             queryFn: (client) => getIssueService(client, projectId, issueIid),
             enabled: Boolean(projectId) && Boolean(issueIid),
+            select: (data) => get(data, [0]),
         }
     }));
 
@@ -55,19 +60,17 @@ const useLoadDependentData: UseLoadDependentData = () => {
             queryKey: [QueryKey.PROJECTS, projectId],
             queryFn: (client) => getProjectService(client, projectId),
             enabled: Boolean(projectId) && issues.every(({ isFetched }) => isFetched),
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            select: (data) => getOption<Issue["project_id"]>(data.id, data.name),
+            select: (data: Project) => getOption<Project["id"]>(data.id, data.name),
         }
     }));
 
     return {
-        isLoading: [
+        isLoading: isEmpty(entityIds) ? false : [
             ...issues,
             ...projects,
         ].every(({ isLoading }) => isLoading),
-        issues: issues?.filter(({ data }) => Boolean(data)).map(({ data }) => data) || [],
-        projectOptions: projects?.filter(({ data }) => Boolean(data)).map(({ data }) => data) || [],
+        issues: issues?.filter(({ data }) => Boolean(data)).map(({ data }) => data) || [] as Issue[],
+        projectOptions: projects?.filter(({ data }) => Boolean(data)).map(({ data }) => data) || [] as Array<Option<Project["id"]>>,
     };
 };
 

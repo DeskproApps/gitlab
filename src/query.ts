@@ -14,6 +14,8 @@ enum QueryKey {
     SEARCH_ISSUES = "searchIssues",
     PROJECTS = "projects",
     ISSUES = "issues",
+    COMMENTS = "comments",
+    MERGE_REQUESTS = "mergeRequests",
 }
 
 export { queryClient, QueryKey };

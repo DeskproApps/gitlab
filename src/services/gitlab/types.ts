@@ -1,4 +1,4 @@
-import type { DateTime } from "../../types";
+import type { Maybe, DateTime } from "../../types";
 
 export type OAuthToken = {
     token_type: "Bearer",
@@ -61,16 +61,40 @@ export type Member = {
     avatar_url: string,
 };
 
+export type Milestone = {
+    id: number,
+    iid: number,
+    title: string,
+    web_url: string,
+    description: string,
+    created_at: DateTime,
+    updated_at: DateTime,
+    expired: boolean,
+    project_id: Project["id"],
+    due_date: string,   // "2022-12-31"
+    start_date: string, // "2022-12-01"
+    state: string,      // "active"
+};
+
+export type Label = {
+    id: number,
+    name: string,
+    description: string,
+    description_html: string,
+    color: string,      // "#ff0000"
+    text_color: string, // "#FFFFFF"
+};
+
 export type Issue = {
     id: number,
     iid: number,
     title: string,
     description: string,
-    labels: string[],
+    labels: Label[],
     created_at: DateTime,
     updated_at: DateTime,
     web_url: string,
-    assignee: Member|null,
+    assignee: Maybe<Member>,
     assignees: Member[],
     author: Member,
     blocking_issues_count: number,
@@ -83,13 +107,13 @@ export type Issue = {
     has_tasks: boolean,
     issue_type: "issue",
     merge_requests_count: number,
-    milestone: null,
+    milestone: Maybe<Milestone>,
     moved_to_id: null,
     project_id: number,
     references: {
-        short: string, // "#1",
-        relative: string, // "#1",
-        full: string, // "zpawn/deskpro-public#1",
+        short: string,      // "#1",
+        relative: string,   // "#1",
+        full: string,       // "zpawn/deskpro-public#1",
     },
     service_desk_reply_to: null,
     severity: "UNKNOWN",
@@ -114,4 +138,51 @@ export type Issue = {
         project: string,
         self: string,
     },
+};
+
+export type Project = {
+    id: number,
+    name: string,
+    web_url: string,
+    _links: {
+        cluster_agents: string, // "https://gitlab.com/api/v4/projects/41163642/cluster_agents",
+        events: string,         // "https://gitlab.com/api/v4/projects/41163642/events",
+        issues: string,         // "https://gitlab.com/api/v4/projects/41163642/issues",
+        labels: string,         // "https://gitlab.com/api/v4/projects/41163642/labels",
+        members: string,        // "https://gitlab.com/api/v4/projects/41163642/members",
+        merge_requests: string, // "https://gitlab.com/api/v4/projects/41163642/merge_requests",
+        repo_branches: string,  // "https://gitlab.com/api/v4/projects/41163642/repository/branches",
+        self: string,           // "https://gitlab.com/api/v4/projects/41163642",
+    },
+};
+
+export type IssueComment = {
+    id: number,
+    body: string,
+    system: boolean,
+    attachment: null,
+    author: Member,
+    confidential: boolean,
+    created_at: DateTime,
+    updated_at: DateTime,
+    internal: boolean,
+    noteable_id: Issue["id"],
+    noteable_iid: Issue["iid"],
+    noteable_type: "Issue"
+    resolvable: boolean,
+    type: null,
+};
+
+export type MRState = "merged"|"opened"|"closed";
+
+export type MergeRequest = {
+    id: number,
+    iid: number,
+    title: string,
+    state: MRState,
+    web_url: string,
+    labels: [],
+    description: string,
+    updated_at: DateTime,
+    created_at: DateTime,
 };
