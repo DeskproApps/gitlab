@@ -23,8 +23,11 @@ const ViewIssuePage: FC = () => {
     useSetTitle(`${issueIid}`);
 
      useDeskproElements(({ deRegisterElement, registerElement }) => {
+         deRegisterElement("home");
+         deRegisterElement("menu");
          deRegisterElement("plusButton");
 
+         registerElement("home", { type: "home_button", payload: { type: "changePage", path: "/home" } });
          registerElement("menu", {
              type: "menu",
              items: [{

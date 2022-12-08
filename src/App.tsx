@@ -1,6 +1,7 @@
 import { Suspense } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
 import get from "lodash/get";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useDebouncedCallback } from "use-debounce";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { match } from "ts-pattern";
@@ -32,27 +33,31 @@ const App = () => {
         registerElement("refresh", { type: "refresh_button" });
     });
 
+    const debounceElementEvent = useDebouncedCallback<(id: string, type: string, payload: EventPayload) => void>((_, __, payload) => {
+        const p = payload as EventPayload;
+
+        match(p.type)
+            .with("changePage", () => {
+                if (get(p, ["path"])) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    navigate(p.path as string);
+                }
+            })
+            .with("logout", logout)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            .with("unlinkIssue", () => unlinkIssue(p.params))
+            .otherwise(() => {});
+    }, 500);
+
     useDeskproAppEvents({
         onShow: () => {
             client && setTimeout(() => client.resize(), 200);
         },
-        onElementEvent: (_, __, payload) => {
-            const p = payload as EventPayload;
-
-            match(p.type)
-                .with("changePage", () => {
-                    if (get(p, ["path"])) {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        navigate(p.path as string);
-                    }
-                })
-                .with("logout", logout)
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                .with("unlinkIssue", () => unlinkIssue(p.params))
-                .run();
-        },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        onElementEvent: debounceElementEvent,
     }, [client]);
 
     if (!client) {

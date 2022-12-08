@@ -5,6 +5,7 @@ import {
     HorizontalDivider,
     useDeskproElements,
 } from "@deskpro/app-sdk";
+import { useSetTitle } from "../../hooks";
 import { useLoadDependentData } from "./hooks";
 import { IssueItem } from "../../components";
 import { Container } from "../../components/common";
@@ -13,6 +14,8 @@ import type { Issue } from "../../services/gitlab/types";
 const HomePage: FC = () => {
     const { issues, projectOptions, isLoading } = useLoadDependentData();
     const navigate = useNavigate();
+
+    useSetTitle("GitLab Issues");
 
     const onClickTitle = useCallback((issueIid?: Issue["iid"], projectId?: Issue["project_id"]) => {
         if (issueIid && projectId) {
@@ -26,7 +29,11 @@ const HomePage: FC = () => {
         }
     }, [navigate]);
 
-    useDeskproElements(({ registerElement }) => {
+    useDeskproElements(({ registerElement, deRegisterElement }) => {
+        deRegisterElement("home");
+        deRegisterElement("menu");
+        deRegisterElement("plusButton");
+
         registerElement("menu", {
             type: "menu",
             items: [{

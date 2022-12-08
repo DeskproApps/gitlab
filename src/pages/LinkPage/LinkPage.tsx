@@ -7,6 +7,7 @@ import {
     useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { LinkIssue } from "../../components";
+import { useSetTitle } from "../../hooks";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
 import { getOption, getEntityId } from "../../utils";
@@ -34,8 +35,13 @@ const LinkPage: FC = () => {
 
     const ticketId = get(context, ["data", "ticket", "id"]);
 
+    useSetTitle("Add Issues");
+
     useDeskproElements(({ registerElement, deRegisterElement }) => {
+        deRegisterElement("home");
+        deRegisterElement("menu");
         deRegisterElement("plusButton");
+
         registerElement("menu", {
             type: "menu",
             items: [{
