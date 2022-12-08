@@ -54,7 +54,7 @@
       "title": "",
       "type": "app_embedded",
       "options": {
-        "entrypoint": "http://localhost:3001/#/admin/callback"
+        "entrypoint": "#/admin/callback"
       },
       "isRequired": false,
       "isBackendOnly": false,
