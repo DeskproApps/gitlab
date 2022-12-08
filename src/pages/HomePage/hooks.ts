@@ -1,4 +1,5 @@
 import { useState } from "react";
+import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import {
     useDeskproLatestAppContext,
@@ -64,7 +65,7 @@ const useLoadDependentData: UseLoadDependentData = () => {
     }));
 
     return {
-        isLoading: [
+        isLoading: isEmpty(entityIds) ? false : [
             ...issues,
             ...projects,
         ].every(({ isLoading }) => isLoading),

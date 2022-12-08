@@ -32,7 +32,7 @@ const MergeRequests: FC<Pick<Props, "mergeRequests">> = ({ mergeRequests }) => {
         <Container>
             <Title title={`Related Merge Requests (${count})`}/>
 
-            {count && mergeRequests.map((mr, idx) => (
+            {Boolean(count) && mergeRequests.map((mr, idx) => (
                 <MR key={mr.id} isLast={isLast(mergeRequests, idx)} {...mr} />
             ))}
         </Container>
