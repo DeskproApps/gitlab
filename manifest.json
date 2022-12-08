@@ -8,7 +8,16 @@
   "hasDevMode": true,
   "targets": [{
     "target": "ticket_sidebar",
-    "entrypoint": "index.html"
+    "entrypoint": "index.html",
+    "options": {
+      "actions": {
+        "linkTicket": {
+          "type": "ticket_addition",
+          "title": "GitLab Issue",
+          "description": "Link ticket to a GitLab issue"
+        }
+      }
+    }
   }],
   "entityAssociations": {
     "linkedGitlabIssue": {

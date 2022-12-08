@@ -6,6 +6,7 @@ import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { match } from "ts-pattern";
 import {
+    TargetAction,
     LoadingSpinner,
     useDeskproElements,
     useDeskproAppClient,
@@ -48,8 +49,17 @@ const App = () => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             .with("unlinkIssue", () => unlinkIssue(p.params))
-            .otherwise(() => {});
+            .run();
     }, 500);
+
+    const debounceTargetAction = useDebouncedCallback<(a: TargetAction) => void>(
+        (action: TargetAction) => {
+            match(action.name)
+                .with("linkTicket", () => navigate("/"))
+                .run();
+        },
+        500,
+    );
 
     useDeskproAppEvents({
         onShow: () => {
@@ -58,6 +68,7 @@ const App = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         onElementEvent: debounceElementEvent,
+        onTargetAction: debounceTargetAction,
     }, [client]);
 
     if (!client) {
