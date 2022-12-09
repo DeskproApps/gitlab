@@ -1,5 +1,6 @@
 import { createSearchParams } from "react-router-dom";
 import { proxyFetch, IDeskproClient } from "@deskpro/app-sdk";
+import { placeholders } from "./constants";
 import type { OAuthToken } from "./types";
 
 const getAccessTokenService = async (
@@ -7,7 +8,7 @@ const getAccessTokenService = async (
     accessCode: string,
     callbackUrl: string
 ): Promise<OAuthToken> => {
-    const url = `https://gitlab.com/oauth/token?${createSearchParams([
+    const url = `${placeholders.gitlab_instance_url}/oauth/token?${createSearchParams([
         ["grant_type", "authorization_code"],
         ["client_id", "__app_id__"],
         ["client_secret", "__client_secret__"],
