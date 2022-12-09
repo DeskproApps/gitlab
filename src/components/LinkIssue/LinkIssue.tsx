@@ -11,7 +11,6 @@ import {
     Search,
     NoFound,
     CardBody,
-    Container,
     CardMedia,
     SingleSelect,
 } from "../common";
@@ -52,7 +51,7 @@ const LinkIssue: FC<Props> = ({
     onChangeSelectedIssue,
 }) => {
     return (
-        <Container>
+        <>
             <Search
                 value={value}
                 isFetching={isFetching}
@@ -109,7 +108,7 @@ const LinkIssue: FC<Props> = ({
                         </Fragment>
                     ))
             }
-        </Container>
+        </>
     );
 };
 

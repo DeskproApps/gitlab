@@ -1,12 +1,15 @@
-import { FC, ChangeEvent, useState } from "react";
+import { FC, ChangeEvent, useState, useCallback } from "react";
+import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import get from "lodash/get";
 import {
+    TwoButtonGroup,
     useDeskproElements,
     useDeskproAppClient,
     useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { LinkIssue } from "../../components";
+import { Container } from "../../components/common";
 import { useSetTitle } from "../../hooks";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
@@ -34,6 +37,8 @@ const LinkPage: FC = () => {
     const { isLoading, isFetching, issues, projectOptions } = useSearch(search);
 
     const ticketId = get(context, ["data", "ticket", "id"]);
+
+    const onNavigateToCreateIssue = useCallback(() => navigate("/create-issue"), [navigate]);
 
     useSetTitle("Add Issues");
 
@@ -94,21 +99,32 @@ const LinkPage: FC = () => {
     };
 
     return (
-        <LinkIssue
-            onChange={onChangeSearch}
-            onClear={onClearSearch}
-            isFetching={isFetching}
-            isLoading={isLoading}
-            value={search}
-            selectedProject={selectedProject}
-            onChangeSelect={onChangeSelect}
-            onChangeSelectedIssue={onChangeSelectedIssue}
-            selectedIssues={selectedIssues}
-            projectOptions={[getOption("any", "Any"), ...projectOptions.filter((o) => Boolean(o))]}
-            issues={getFilteredIssues(issues, selectedProject)}
-            onLinkIssues={onLinkIssues}
-            onCancel={onCancel}
-        />
+        <Container>
+            <TwoButtonGroup
+                selected="one"
+                oneLabel="Find Issue"
+                oneIcon={faSearch}
+                twoLabel="Create Issue"
+                twoIcon={faPlus}
+                oneOnClick={() => {}}
+                twoOnClick={onNavigateToCreateIssue}
+            />
+            <LinkIssue
+                onChange={onChangeSearch}
+                onClear={onClearSearch}
+                isFetching={isFetching}
+                isLoading={isLoading}
+                value={search}
+                selectedProject={selectedProject}
+                onChangeSelect={onChangeSelect}
+                onChangeSelectedIssue={onChangeSelectedIssue}
+                selectedIssues={selectedIssues}
+                projectOptions={[getOption("any", "Any"), ...projectOptions.filter((o) => Boolean(o))]}
+                issues={getFilteredIssues(issues, selectedProject)}
+                onLinkIssues={onLinkIssues}
+                onCancel={onCancel}
+            />
+        </Container>
     );
 };
 
