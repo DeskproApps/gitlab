@@ -17,12 +17,12 @@ import { getOption, getEntityId } from "../../utils";
 import type { Option } from "../../types";
 import type { Issue } from "../../services/gitlab/types";
 
-const getFilteredIssues = (issues: Issue[], selectedProject: Option<string|Issue["project_id"]>) => {
-    if (selectedProject.value === "any") {
+const getFilteredIssues = (issues: Issue[], selectedProject: Option<Issue["project_id"]|"any">) => {
+    if (selectedProject?.value === "any") {
         return issues
     }
 
-    return issues.filter(({ project_id }) => project_id === selectedProject.value);
+    return issues.filter(({ project_id }) => project_id === selectedProject?.value);
 };
 
 const LinkPage: FC = () => {
@@ -32,7 +32,7 @@ const LinkPage: FC = () => {
 
     const [search, setSearch] = useState<string>("");
     const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
-    const [selectedProject, setSelectedProject] = useState<Option<string|Issue["project_id"]>>(getOption("any", "Any"));
+    const [selectedProject, setSelectedProject] = useState<Option<Issue["project_id"]|"any">>(getOption("any", "Any"));
 
     const { isLoading, isFetching, issues, projectOptions } = useSearch(search);
 
@@ -68,7 +68,7 @@ const LinkPage: FC = () => {
         setSearch("");
     };
 
-    const onChangeSelect = (option: Option<string|Issue["project_id"]>) => {
+    const onChangeSelect = (option: Option<Issue["project_id"]|"any">) => {
         setSelectedProject(option);
     };
 

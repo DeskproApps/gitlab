@@ -1,26 +1,62 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import has from "lodash/has";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { InputWithDisplay } from "@deskpro/deskpro-ui";
-import { Stack, Button as ButtonUI } from "@deskpro/app-sdk";
+import { Stack } from "@deskpro/app-sdk";
 import {
     Label,
     Button,
     TextArea,
-    SingleSelect,
 } from "../common";
-import { getOption } from "../../utils";
+import { useLoadIssueFormDeps } from "./hooks";
+import { getInitValues, validationSchema } from "./utils";
+import { MembersField } from "./MembersField";
+import { MilestoneField } from "./MilestoneField";
+import { TypeField } from "./TypeField";
+import { ProjectField } from "./ProjectField";
+import { LabelsField } from "./LabelsField";
 import type { FC } from "react";
+import type { Props, FormInput } from "./types";
 
-const IssueForm: FC = () => {
-    const isEditMode = true;
+const IssueForm: FC<Props> = ({ onSubmit, onCancel }) => {
+    const [isEditMode] = useState(true);
+    const hookForm = useForm<FormInput>({
+        defaultValues: getInitValues(),
+        resolver: yupResolver(validationSchema),
+    });
+    const { watch, setValue, register, formState, handleSubmit } = hookForm;
+    const { errors, isSubmitting } = formState;
+    const [
+        title,
+        description,
+        type,
+        project,
+        milestone,
+        assignees,
+        labels,
+    // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
+    // @ts-ignore will fix in v8 https://github.com/react-hook-form/react-hook-form/issues/4055#issuecomment-1171531617
+    ] = watch(["title", "description", "type", "project", "milestone", "assignees", "labels"]);
+
+    const {
+        labels: labelItems,
+        memberOptions,
+        projectOptions,
+        milestoneOptions,
+    } = useLoadIssueFormDeps({ projectId: project.value });
 
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Label htmlFor="title" label="Title" required>
                 <InputWithDisplay
                     id="title"
                     type="text"
                     inputsize="small"
                     placeholder="Enter title"
+                    value={title}
+                    error={has(errors, ["title", "message"])}
+                    {...register("title")}
                 />
             </Label>
 
@@ -28,56 +64,62 @@ const IssueForm: FC = () => {
                 <TextArea
                     minHeight="auto"
                     placeholder="Enter description"
+                    value={description}
+                    error={has(errors, ["description", "message"])}
+                    {...register("description")}
                 />
             </Label>
 
-            <Label htmlFor="type" label="Type">
-                <SingleSelect
-                    showInternalSearch
-                    id="repository"
-                    value={getOption("issue", "Issue")}
-                    options={[getOption("issue", "Issue"), getOption("incident", "Incident")]}
-                    onChange={() => {}}
-                />
-            </Label>
+            <ProjectField
+                value={project}
+                options={projectOptions}
+                error={has(errors, ["project", "value", "message"])}
+                onChange={(option) => setValue("project", option)}
+            />
 
-            <Label htmlFor="project" label="Project">
-                <SingleSelect
-                    showInternalSearch
-                    id="Project"
-                    value={getOption("01", "Project 1")}
-                    options={[getOption("01", "Project 1"), getOption("02", "Project 2")]}
-                    onChange={() => {}}
-                />
-            </Label>
+            <TypeField
+                value={type}
+                error={has(errors, ["type", "value", "message"])}
+                onChange={(option) => setValue("type", option)}
+            />
 
-            <Label htmlFor="milestone" label="Milestone">
-                <SingleSelect
-                    showInternalSearch
-                    id="milestone"
-                    value={getOption("01", "Milestone 1")}
-                    options={[getOption("01", "Milestone 1"), getOption("02", "Milestone 2")]}
-                    onChange={() => {}}
-                />
-            </Label>
+            <MilestoneField
+                value={milestone}
+                options={milestoneOptions}
+                error={has(errors, ["milestone", "value", "message"])}
+                onChange={(option) => setValue("milestone", option)}
+            />
 
-            <Label htmlFor="assignees" label="Assignees">
-                <SingleSelect
-                    showInternalSearch
-                    id="assignees"
-                    value={getOption("01", "Armen Tamzarian")}
-                    options={[getOption("01", "Armen Tamzarian"), getOption("02", "Vasia Pupkin")]}
-                    onChange={() => {}}
-                />
-            </Label>
+            <MembersField
+                value={assignees}
+                options={memberOptions}
+                error={has(errors, ["assignees", "value", "message"])}
+                onChange={(option) => setValue("assignees", option)}
+            />
 
-            <Label htmlFor="labels" label="Labels" style={{ flexDirection: "column", alignItems: "flex-start" }}>
-                <ButtonUI text="Add" minimal icon={faPlus} />
-            </Label>
+            <LabelsField
+                value={labels}
+                labels={labelItems}
+                onChange={(option) => {
+                    if (option.value) {
+                        const selectedLabels = Array.isArray(labels) ? labels : [];
+                        const newValue = selectedLabels.includes(option.value)
+                            ? selectedLabels.filter((name) => name !== option.value)
+                            : [...selectedLabels, option.value];
+
+                        setValue("labels", newValue);
+                    }
+                }}
+            />
 
             <Stack justify="space-between">
-                <Button type="submit" text={isEditMode ? "Save" : "Create"} />
-                <Button text="Cancel" intent="tertiary" onClick={() => {}} />
+                <Button
+                    type="submit"
+                    text={isEditMode ? "Save" : "Create"}
+                    disabled={isSubmitting}
+                    loading={isSubmitting}
+                />
+                {onCancel && <Button text="Cancel" intent="tertiary" onClick={onCancel} />}
             </Stack>
         </form>
     );

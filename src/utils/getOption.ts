@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
-import { Option } from "../types";
+import type { DropdownValueType } from "@deskpro/app-sdk";
+import type { Option } from "../types";
 
-const getOption = <Value, >(
+const getOption = <Value>(
     value: Value,
-    label: ReactNode,
+    label: DropdownValueType<Value>["label"],
 ): Option<Value> => ({
     label,
     value,
-    key: value,
+    key: `${value}`,
     type: "value",
 });
 

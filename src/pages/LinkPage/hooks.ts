@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import isEmpty from "lodash/isEmpty";
 import uniq from "lodash/uniq";
-import {useQueriesWithClient, useQueryWithClient} from "../../hooks";
+import { useQueriesWithClient, useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { searchIssuesService, getProjectService } from "../../services/gitlab";
 import { debouncePromise, getOption } from "../../utils";
 import type { Option } from "../../types";
-import type { Issue } from "../../services/gitlab/types";
+import type { Issue, Project } from "../../services/gitlab/types";
 
 type UseSearch = (q: string) => {
     isLoading: boolean,
     isFetching: boolean,
     issues: Issue[],
-    projectOptions: Array<Option<Issue["project_id"]>>,
+    projectOptions: Array<Option<Project["id"]>>,
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -39,9 +39,7 @@ const useSearch: UseSearch = (q) => {
         queryKey: [QueryKey.PROJECTS, projectId],
         queryFn: (client) => getProjectService(client, projectId),
         enabled: Boolean(projectId),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        select: (data) => getOption<Issue["project_id"]>(data.id, data.name),
+        select: (data: Project) => getOption<Project["id"]>(data.id, data.name),
     })));
 
     useEffect(() => {

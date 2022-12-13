@@ -1,5 +1,4 @@
-import type { ReactNode } from "react";
-import type { Context, IDeskproClient } from "@deskpro/app-sdk";
+import type { Context, IDeskproClient, DropdownValueType } from "@deskpro/app-sdk";
 import type { Issue } from "./services/gitlab/types";
 
 export type Maybe<T> = T | undefined | null;
@@ -11,13 +10,7 @@ export type Dict<T> = Record<string, T>;
  */
 export type DateTime = string;
 
-// ToDo: change to DropdownValueType from @deskpro/deskpro-ui
-export type Option<Value> = {
-    value: Value,
-    key: Value,
-    label: ReactNode,
-    type: "value",
-};
+export type Option<Value = unknown> = Omit<DropdownValueType<Value>, "subItems">;
 
 export type Settings = {
     app_id: string,

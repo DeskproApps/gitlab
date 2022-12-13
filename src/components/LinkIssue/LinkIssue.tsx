@@ -27,7 +27,7 @@ type Props = {
     onChange: SearchProps["onChange"],
     onClear: SearchProps["onClear"],
     selectedProject: Option<string|Issue["project_id"]>,
-    onChangeSelect: (o: Option<string|Issue["project_id"]>) => void,
+    onChangeSelect: (o: Option<Issue["project_id"]|"any">) => void,
     selectedIssues: string[],
     projectOptions: Array<Option<string|Issue["project_id"]>>,
     onLinkIssues: () => void,
@@ -58,13 +58,14 @@ const LinkIssue: FC<Props> = ({
                 onChange={onChange}
                 onClear={onClear}
             />
-            <SingleSelect
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <SingleSelect onChange={onChangeSelect}
                 id="group"
                 label="Group"
                 value={selectedProject}
                 options={projectOptions as DropdownValueType<Issue["project_id"]>[]}
                 showInternalSearch
-                onChange={onChangeSelect}
             />
             <Stack justify="space-between" style={{ paddingBottom: "4px" }}>
                 <Button

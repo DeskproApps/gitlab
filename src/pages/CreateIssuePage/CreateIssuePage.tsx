@@ -1,15 +1,69 @@
 import { useCallback } from "react";
-import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { TwoButtonGroup } from "@deskpro/app-sdk";
+import get from "lodash/get";
+import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+    TwoButtonGroup,
+    useDeskproElements,
+    useDeskproAppClient,
+    useDeskproLatestAppContext,
+} from "@deskpro/app-sdk";
+import { setEntityIssueService } from "../../services/entityAssociation";
+import { createIssueService } from "../../services/gitlab";
+import { useSetTitle } from "../../hooks";
+import { getEntityId } from "../../utils";
 import { Container } from "../../components/common";
-import { IssueForm } from "../../components/IssueForm";
+import { IssueForm, getIssueValues } from "../../components/IssueForm";
 import type { FC } from "react";
+import type { FormInput } from "../../components/IssueForm";
 
 const CreateIssuePage: FC = () => {
     const navigate = useNavigate();
+    const { client } = useDeskproAppClient();
+    const { context } = useDeskproLatestAppContext();
+
+    const ticketId = get(context, ["data", "ticket", "id"]);
 
     const onNavigateToLinkIssue = useCallback(() => navigate("/link"), [navigate]);
+
+    useSetTitle("Add Issues");
+
+    useDeskproElements(({ registerElement, deRegisterElement }) => {
+        deRegisterElement("home");
+        deRegisterElement("menu");
+        deRegisterElement("plusButton");
+
+        registerElement("menu", {
+            type: "menu",
+            items: [{
+                title: "Log Out",
+                payload: { type: "logout" },
+            }],
+        });
+    });
+
+    const onCancel = useCallback(() => navigate("/home"), [navigate]);
+
+    const onSubmit: SubmitHandler<FormInput> = useCallback((data) => {
+        if (!client || !ticketId) {
+            return;
+        }
+
+        const projectId = data.project.value;
+
+        return createIssueService(client, projectId, getIssueValues(data))
+            .then((issue) => {
+                return setEntityIssueService(client, ticketId, getEntityId(issue))
+            })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore ToDo: need to fix typings in @app-sdk
+            .then((isSuccess: boolean) => {
+                if (isSuccess) {
+                    navigate("/home")
+                }
+            });
+    }, [client, ticketId, navigate]);
 
     return (
         <Container>
@@ -22,7 +76,10 @@ const CreateIssuePage: FC = () => {
                 oneOnClick={onNavigateToLinkIssue}
                 twoOnClick={() => {}}
             />
-            <IssueForm />
+            <IssueForm
+                onSubmit={onSubmit}
+                onCancel={onCancel}
+            />
         </Container>
     );
 };

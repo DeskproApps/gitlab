@@ -16,6 +16,9 @@ enum QueryKey {
     ISSUES = "issues",
     COMMENTS = "comments",
     MERGE_REQUESTS = "mergeRequests",
+    MILESTONES = "milestones",
+    MEMBERS = "members",
+    LABELS = "labels",
 }
 
 export { queryClient, QueryKey };

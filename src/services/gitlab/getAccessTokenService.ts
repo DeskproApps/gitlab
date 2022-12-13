@@ -10,8 +10,8 @@ const getAccessTokenService = async (
 ): Promise<OAuthToken> => {
     const url = `${placeholders.gitlab_instance_url}/oauth/token?${createSearchParams([
         ["grant_type", "authorization_code"],
-        ["client_id", "__app_id__"],
-        ["client_secret", "__client_secret__"],
+        ["client_id", placeholders.app_id],
+        ["client_secret", placeholders.client_secret],
         ["code", accessCode],
         ["redirect_uri", callbackUrl],
     ])}`;
