@@ -14,3 +14,4 @@ export { Member } from "./Member";
 export { IssueLabel } from "./IssueLabel";
 export { IconLink } from "./Link";
 export { TextArea } from "./TextArea";
+export { OverflowText } from "./OverflowText";

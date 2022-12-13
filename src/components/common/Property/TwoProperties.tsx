@@ -21,12 +21,12 @@ const Side = styled.div<{ withDivider?: boolean }>`
 
     ${({ withDivider }) => withDivider
         ? css`
-              calc(49% - 6px - 11px);
+              width: calc(50% - 6px - 1px);
               padding-left: 10px;
               border-left: 1px solid ${({ theme }) => theme.colors.grey20};
         `
         : css`
-              width:calc(49% - 6px);
+              width: calc(50% - 6px);
         `
     }
 `;
