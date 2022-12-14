@@ -80,7 +80,7 @@ const useLogin: UseLogin = () => {
                 ["redirect_uri", callbackUrl],
                 ["response_type", "code"],
                 ["state", key],
-                ["scope", ["read_api"].join(" ")],
+                ["scope", ["api"].join(" ")],
             ])}`);
             setIsLoading(false);
         } else {

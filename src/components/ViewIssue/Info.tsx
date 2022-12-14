@@ -11,6 +11,7 @@ import {
     IconLink,
     Container,
     IssueLabel,
+    OverflowText,
     TwoProperties,
 } from "../common";
 import { nbsp } from "../../constants";
@@ -18,6 +19,9 @@ import type { FC } from "react";
 import type { Props } from "./types";
 
 const Info: FC<Pick<Props, "issue"|"project">> = ({ issue, project }) => {
+    const projectName = get(project, ["name"]);
+    const milestone = get(issue, ["milestone", "title"]);
+
     return (
         <Container>
             <Title
@@ -27,7 +31,7 @@ const Info: FC<Pick<Props, "issue"|"project">> = ({ issue, project }) => {
             <Property
                 label="Description"
                 text={(
-                    <div dangerouslySetInnerHTML={{ __html: mdToHtml(get(issue, ["description"], "-")) }}/>
+                    <div dangerouslySetInnerHTML={{ __html: mdToHtml(get(issue, ["description"], "-")) || "-" }}/>
                 )}
             />
             <TwoProperties
@@ -40,23 +44,29 @@ const Info: FC<Pick<Props, "issue"|"project">> = ({ issue, project }) => {
                 leftLabel="Issue ID"
                 leftText={get(issue, ["iid"], "-")}
                 rightLabel="Project"
-                rightText={(
-                    <P5>
-                        {get(project, ["name"], "-")}{nbsp}
-                        <IconLink href={get(project, ["web_url"], "")}/>
-                    </P5>
-                )}
+                rightText={projectName
+                    ? (
+                        <P5 style={{ display: "flex" }}>
+                            <OverflowText>{projectName}{nbsp}</OverflowText>
+                            <IconLink href={get(project, ["web_url"], "")}/>
+                        </P5>
+                    )
+                    : "-"
+                }
             />
             <TwoProperties
                 leftLabel="Due date"
                 leftText={format(get(issue, ["due_date"]))}
                 rightLabel="Milestone"
-                rightText={(
-                    <P5>
-                        {get(issue, ["milestone", "title"], "-")}{nbsp}
-                        <IconLink href={get(issue, ["milestone", "web_url"], "-")} />
-                    </P5>
-                )}
+                rightText={milestone
+                    ? (
+                        <P5 style={{ display: "flex" }}>
+                            <OverflowText>{milestone}{nbsp}</OverflowText>
+                            <IconLink href={get(issue, ["milestone", "web_url"], "-")} />
+                        </P5>
+                    )
+                    : "-"
+                }
             />
             <Property
                 label="Author"

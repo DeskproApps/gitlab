@@ -15,6 +15,7 @@ const baseRequest: Request = async (client, {
     const dpFetch = await proxyFetch(client);
 
     const baseUrl = `${REST_URL}${url}`;
+    /** ToDo: transform queryParams from object to array [[key, value], [key, value]] */
     const params = `${isEmpty(queryParams) ? "" : `?${createSearchParams(queryParams)}`}`;
     const requestUrl = `${baseUrl}${params}`;
     const options: RequestInit = {
@@ -38,6 +39,11 @@ const baseRequest: Request = async (client, {
     const res = await dpFetch(requestUrl, options);
 
     if (res.status < 200 || res.status > 399) {
+        /** ToDo: handle error
+         * 401 - { message: "401 Unauthorized" }
+         * 401 (invalid_token) - {"error":"invalid_token","error_description":"Token is expired. You can either do re-authorization or token refresh."}
+         * 403 (scope) -
+         * */
         throw new GitLabError({ message: await res.text() });
     }
 

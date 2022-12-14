@@ -1,17 +1,19 @@
-import { FC, useEffect, useState, useMemo } from "react";
+import { FC, useState } from "react";
+import get from "lodash/get";
 import {
     faCheck,
     faCaretDown,
     faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-    Dropdown,
     LabelProps,
-    DropdownValueType,
-    DropdownTargetProps,
     DivAsInputWithDisplay,
     DivAsInputWithDisplayProps,
 } from "@deskpro/deskpro-ui";
+import {
+    Dropdown,
+    DropdownTargetProps,
+} from "@deskpro/app-sdk";
 import { Label } from "../Label";
 import type { Option } from "../../../types";
 
@@ -19,9 +21,9 @@ type Props = {
     id: string,
     label?: string,
     error?: DivAsInputWithDisplayProps["error"],
-    value: Option<string|number>,
-    options: DropdownValueType<string|number>[],
-    onChange: (o: Option<string|number>) => void,
+    value: Option,
+    options: Option[],
+    onChange: (o: Option) => void,
     placeholder?: DivAsInputWithDisplayProps["placeholder"],
     showInternalSearch?: boolean,
     required?: LabelProps["required"],
@@ -40,15 +42,6 @@ const SingleSelect: FC<Props> = ({
     ...props
 }) => {
     const [input, setInput] = useState<string>("");
-    const [dirtyInput, setDirtyInput] = useState<boolean>(false);
-
-    const selectedValue = useMemo(() => {
-        return options.filter((o: DropdownValueType<string|number>) => o?.value === value?.value)[0]?.label ?? "";
-    }, [value, options]);
-
-    useEffect(() => {
-        setInput((value?.label || "Select Value") as string);
-    }, [value]);
 
     return (
         <Dropdown
@@ -59,23 +52,18 @@ const SingleSelect: FC<Props> = ({
             externalLinkIcon={faExternalLinkAlt}
             placement="bottom-start"
             hideIcons
-            inputValue={!dirtyInput ? "" : input}
+            inputValue={input}
             onSelectOption={(selectedOption) => {
-                if (!dirtyInput && showInternalSearch) {
-                    setDirtyInput(true);
-                }
+                setInput("");
                 onChange(selectedOption);
             }}
             onInputChange={(value) => {
                 if (showInternalSearch) {
-                    !dirtyInput && setDirtyInput(true);
                     setInput(value);
                 }
             }}
-            options={options.filter((option: DropdownValueType<number|string>) => {
-                return !dirtyInput
-                    ? true
-                    : (option.label as string).includes(input);
+            options={options.filter((option: Option) => {
+                return (get(option, ["label"], "") as string).includes(input);
             })}
             {...props}
         >
@@ -85,7 +73,7 @@ const SingleSelect: FC<Props> = ({
                         <DivAsInputWithDisplay
                             id={id}
                             placeholder={placeholder || "Select Value"}
-                            value={selectedValue}
+                            value={get(value, ["label"], "") || ""}
                             variant="inline"
                             rightIcon={faCaretDown}
                             error={error}

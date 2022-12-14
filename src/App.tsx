@@ -19,6 +19,7 @@ import {
     AdminPage,
     LoginPage,
     ViewIssuePage,
+    CreateIssuePage,
 } from "./pages";
 import { ErrorFallback } from "./components";
 import { useLogout, useUnlinkIssue } from "./hooks";
@@ -90,6 +91,7 @@ const App = () => {
                               <Route path="/home" element={<HomePage/>} />
                               <Route path="/link" element={<LinkPage/>} />
                               <Route path="/view-issue" element={<ViewIssuePage/>} />
+                              <Route path="/create-issue" element={<CreateIssuePage/>} />
                               <Route index element={<Main/>} />
                           </Routes>
                       </ErrorBoundary>
