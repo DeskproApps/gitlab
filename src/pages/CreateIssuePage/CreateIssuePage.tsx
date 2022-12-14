@@ -32,7 +32,8 @@ const CreateIssuePage: FC = () => {
     useDeskproElements(({ registerElement, deRegisterElement }) => {
         deRegisterElement("home");
         deRegisterElement("menu");
-        deRegisterElement("plusButton");
+        deRegisterElement("plus");
+        deRegisterElement("edit");
 
         registerElement("menu", {
             type: "menu",

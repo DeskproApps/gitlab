@@ -31,7 +31,8 @@ const LoginPage: FC = () => {
     useDeskproElements(({ deRegisterElement }) => {
         deRegisterElement("home");
         deRegisterElement("menu");
-        deRegisterElement("plusButton");
+        deRegisterElement("plus");
+        deRegisterElement("edit");
     });
 
     /** redirect after authorized */

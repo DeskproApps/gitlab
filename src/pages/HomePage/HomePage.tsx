@@ -35,7 +35,8 @@ const HomePage: FC = () => {
     useDeskproElements(({ registerElement, deRegisterElement }) => {
         deRegisterElement("home");
         deRegisterElement("menu");
-        deRegisterElement("plusButton");
+        deRegisterElement("plus");
+        deRegisterElement("edit");
 
         registerElement("menu", {
             type: "menu",
@@ -44,7 +45,7 @@ const HomePage: FC = () => {
                 payload: { type: "logout" },
             }],
         });
-        registerElement("plusButton", {
+        registerElement("plus", {
             type: "plus_button",
             payload: { type: "changePage", path: "/link" },
         });
