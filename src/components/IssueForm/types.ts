@@ -22,6 +22,7 @@ export type IssueValues = {
 };
 
 export type Props = {
+    isEditMode?: boolean,
     onSubmit: SubmitHandler<FormInput>,
     onCancel?: () => void,
 };

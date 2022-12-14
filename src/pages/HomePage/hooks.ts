@@ -48,6 +48,7 @@ const useLoadDependentData: UseLoadDependentData = () => {
             queryFn: (client) => getIssueService(client, projectId, issueIid),
             enabled: Boolean(projectId) && Boolean(issueIid),
             select: (data) => get(data, [0]),
+            useErrorBoundary: false,
         }
     }));
 
@@ -61,6 +62,7 @@ const useLoadDependentData: UseLoadDependentData = () => {
             queryFn: (client) => getProjectService(client, projectId),
             enabled: Boolean(projectId) && issues.every(({ isFetched }) => isFetched),
             select: (data: Project) => getOption<Project["id"]>(data.id, data.name),
+            useErrorBoundary: false,
         }
     }));
 

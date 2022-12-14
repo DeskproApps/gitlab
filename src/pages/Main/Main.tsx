@@ -1,8 +1,11 @@
-import { FC } from "react";
+import { LoadingSpinner } from "@deskpro/app-sdk";
 import { useCheckLinkedIssues } from "./hooks";
+import type { FC } from "react";
 
 export const Main: FC = () => {
     useCheckLinkedIssues();
 
-    return null;
+    return (
+        <LoadingSpinner/>
+    );
 };

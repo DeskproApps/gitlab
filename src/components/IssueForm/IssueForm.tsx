@@ -1,4 +1,3 @@
-import { useState } from "react";
 import has from "lodash/has";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,8 +18,7 @@ import { LabelsField } from "./LabelsField";
 import type { FC } from "react";
 import type { Props, FormInput } from "./types";
 
-const IssueForm: FC<Props> = ({ onSubmit, onCancel }) => {
-    const [isEditMode] = useState(true);
+const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel }) => {
     const hookForm = useForm<FormInput>({
         defaultValues: getInitValues(),
         resolver: yupResolver(validationSchema),
