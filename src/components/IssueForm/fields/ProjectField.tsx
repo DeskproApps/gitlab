@@ -1,35 +1,41 @@
+import { useState } from "react";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
 import { Dropdown, DropdownTargetProps } from "@deskpro/app-sdk";
-import { Label } from "../common";
+import { Label } from "../../common";
 import type { FC } from "react";
-import type { Option } from "../../types";
-import { getOption } from "../../utils";
+import type { Option } from "../../../types";
+import type { Project } from "../../../services/gitlab/types";
 
-const TypeField: FC<{
-    value: Option<"issue"|"incident">,
+const ProjectField: FC<{
+    value: Option<Project["id"]>,
+    options: Array<Option<Project["id"]>>,
     error: boolean,
-    onChange: (o: Option<"issue"|"incident">) => void,
-}> = ({ value, error, onChange }) => {
+    onChange: (o: Option<Project["id"]>) => void,
+}> = ({ value, options, error, onChange }) => {
+    const [inputSearch, setInputSearch] = useState<string>("");
+
     return (
         <Dropdown
+            showInternalSearch
             fetchMoreText={"Fetch more"}
             autoscrollText={"Autoscroll"}
             selectedIcon={faCheck}
             externalLinkIcon={faExternalLinkAlt}
             placement="bottom-start"
             hideIcons
-            options={[
-                getOption<"issue">("issue", "Issue"),
-                getOption<"incident">("incident", "Incident"),
-            ]}
+            options={options.filter(({ label }) => {
+                return (label as string).toLowerCase().includes(inputSearch.toLowerCase());
+            })}
             onSelectOption={onChange}
+            inputValue={inputSearch}
+            onInputChange={setInputSearch}
         >
             {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) => {
                 return (
-                    <Label htmlFor="type" label="Type">
+                    <Label htmlFor="project" label="Project" required>
                         <DivAsInputWithDisplay
-                            id="type"
+                            id="project"
                             placeholder="Select Value"
                             value={value.label || ""}
                             variant="inline"
@@ -46,4 +52,4 @@ const TypeField: FC<{
     );
 };
 
-export { TypeField };
+export { ProjectField };

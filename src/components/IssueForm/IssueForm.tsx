@@ -2,7 +2,7 @@ import has from "lodash/has";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { InputWithDisplay } from "@deskpro/deskpro-ui";
-import { Stack } from "@deskpro/app-sdk";
+import { Stack, LoadingSpinner } from "@deskpro/app-sdk";
 import {
     Label,
     Button,
@@ -10,21 +10,27 @@ import {
 } from "../common";
 import { useLoadIssueFormDeps } from "./hooks";
 import { getInitValues, validationSchema } from "./utils";
-import { MembersField } from "./MembersField";
-import { MilestoneField } from "./MilestoneField";
-import { TypeField } from "./TypeField";
-import { ProjectField } from "./ProjectField";
-import { LabelsField } from "./LabelsField";
+import {
+    TypeField,
+    LabelsField,
+    ProjectField,
+    MembersField,
+    MilestoneField,
+} from "./fields";
 import type { FC } from "react";
 import type { Props, FormInput } from "./types";
 
-const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel }) => {
-    const hookForm = useForm<FormInput>({
-        defaultValues: getInitValues(),
+const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }) => {
+    const {
+        watch,
+        setValue,
+        register,
+        formState: { errors, isSubmitting },
+        handleSubmit,
+    } = useForm<FormInput>({
+        defaultValues: getInitValues(params),
         resolver: yupResolver(validationSchema),
     });
-    const { watch, setValue, register, formState, handleSubmit } = hookForm;
-    const { errors, isSubmitting } = formState;
     const [
         title,
         description,
@@ -38,11 +44,18 @@ const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel }) => {
     ] = watch(["title", "description", "type", "project", "milestone", "assignees", "labels"]);
 
     const {
-        labels: labelItems,
+        isLoading,
         memberOptions,
         projectOptions,
         milestoneOptions,
+        labels: labelItems,
     } = useLoadIssueFormDeps({ projectId: project.value });
+
+    if (isLoading) {
+        return (
+            <LoadingSpinner />
+        );
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>

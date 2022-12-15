@@ -85,6 +85,8 @@ export type Label = {
     text_color: string, // "#FFFFFF"
 };
 
+export type IssueType = "issue"|"incident"|"test_case";
+
 export type Issue = {
     id: number,
     iid: number,
@@ -105,7 +107,7 @@ export type Issue = {
     downvotes: number,
     due_date: null,
     has_tasks: boolean,
-    issue_type: "issue",
+    issue_type: IssueType,
     merge_requests_count: number,
     milestone: Maybe<Milestone>,
     moved_to_id: null,
