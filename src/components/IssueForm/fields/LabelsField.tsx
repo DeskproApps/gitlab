@@ -1,11 +1,11 @@
 import { faCheck, faExternalLinkAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Button as ButtonUI } from "@deskpro/deskpro-ui";
 import { Dropdown, DropdownTargetProps, Stack } from "@deskpro/app-sdk";
-import { getOption } from "../../utils";
-import { IssueLabel, Label } from "../common";
+import { getOption } from "../../../utils";
+import { IssueLabel, Label } from "../../common";
 import type { FC } from "react";
-import type { Option } from "../../types";
-import type { Label as LabelType } from "../../services/gitlab/types";
+import type { Option } from "../../../types";
+import type { Label as LabelType } from "../../../services/gitlab/types";
 
 const LabelsField: FC<{
     value: Array<LabelType["name"]>,

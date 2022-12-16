@@ -14,6 +14,7 @@ import type { Option } from "../../types";
 export type UseLoadIssueFormDeps = (params: {
     projectId: Maybe<Project["id"]>,
 }) => {
+    isLoading: boolean,
     projectOptions: Array<Option<Project["id"]>>
     milestoneOptions: Array<Option<Milestone["id"]>>,
     memberOptions: Array<Option<Member["id"]>>,
@@ -54,6 +55,12 @@ const useLoadIssueFormDeps: UseLoadIssueFormDeps = ({ projectId }) => {
     );
 
     return {
+        isLoading: [
+            projects,
+            milestones,
+            members,
+            labels,
+        ].every(({ isLoading }) => isLoading),
         projectOptions: projects.data || [],
         milestoneOptions: milestones.data || [],
         memberOptions: members.data || [],

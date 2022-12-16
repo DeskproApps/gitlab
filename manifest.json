@@ -64,7 +64,7 @@
   "proxy": {
     "whitelist": [{
       "url": "__gitlab_instance_url__/.*",
-      "methods": ["GET", "POST"],
+      "methods": ["GET", "POST", "PUT"],
       "timeout": 10
     }]
   }

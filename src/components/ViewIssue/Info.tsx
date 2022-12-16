@@ -31,7 +31,7 @@ const Info: FC<Pick<Props, "issue"|"project">> = ({ issue, project }) => {
             <Property
                 label="Description"
                 text={(
-                    <div dangerouslySetInnerHTML={{ __html: mdToHtml(get(issue, ["description"], "-")) || "-" }}/>
+                    <P5 dangerouslySetInnerHTML={{ __html: mdToHtml(get(issue, ["description"], "-")) || "-" }}/>
                 )}
             />
             <TwoProperties
