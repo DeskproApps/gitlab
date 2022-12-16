@@ -68,7 +68,7 @@ export type TicketData = {
 
 export type TicketContext = Context<TicketData, Maybe<Settings>>;
 
-export type ApiRequestMethod = "GET" | "POST";
+export type ApiRequestMethod = "GET" | "POST" | "PUT";
 
 export type RequestParams = {
     url: string,

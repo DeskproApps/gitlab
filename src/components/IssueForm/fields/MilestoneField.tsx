@@ -2,16 +2,16 @@ import { useState } from "react";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
 import { Dropdown, DropdownTargetProps } from "@deskpro/app-sdk";
-import { Label } from "../common";
+import { Label } from "../../common";
 import type { FC } from "react";
-import type { Option } from "../../types";
-import type { Member } from "../../services/gitlab/types";
+import type { Option } from "../../../types";
+import type { Milestone } from "../../../services/gitlab/types";
 
-const MembersField: FC<{
-    value: Option<Member["id"]>,
-    options: Array<Option<Member["id"]>>,
+const MilestoneField: FC<{
+    value: Option<Milestone["id"]>,
+    options: Array<Option<Milestone["id"]>>,
     error: boolean,
-    onChange: (o: Option<Member["id"]>) => void,
+    onChange: (o: Option<Milestone["id"]>) => void,
 }> = ({ value, options, error, onChange }) => {
     const [inputSearch, setInputSearch] = useState<string>("");
 
@@ -29,13 +29,13 @@ const MembersField: FC<{
             })}
             onSelectOption={onChange}
             inputValue={inputSearch}
-            onInputChange={(value) => setInputSearch(value)}
+            onInputChange={setInputSearch}
         >
             {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) => {
                 return (
-                    <Label htmlFor="assignees" label="Assignees">
+                    <Label htmlFor="milestone" label="Milestone">
                         <DivAsInputWithDisplay
-                            id="assignees"
+                            id="milestone"
                             placeholder="Select Value"
                             value={value.label || ""}
                             variant="inline"
@@ -52,4 +52,4 @@ const MembersField: FC<{
     );
 };
 
-export { MembersField };
+export { MilestoneField };
