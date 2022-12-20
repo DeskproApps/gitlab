@@ -41,7 +41,7 @@ const Comment = styled(P1)`
     }
 `;
 
-const Comments: FC<Pick<Props, "comments">> = ({ comments }) => {
+const Comments: FC<Pick<Props, "comments"|"onCreateIssueComment">> = ({ comments, onCreateIssueComment }) => {
     const count = (Array.isArray(comments) && comments.length > 0) ? comments.length : 0;
     const isEmptyComments = useMemo(() => {
         return !(Array.isArray(comments) && comments.length > 0);
@@ -49,7 +49,7 @@ const Comments: FC<Pick<Props, "comments">> = ({ comments }) => {
 
     return (
         <Container>
-            <Title title={`Comments (${count})`}/>
+            <Title title={`Comments (${count})`} onClick={onCreateIssueComment} />
 
             {!isEmptyComments && comments.map(({ id, body, updated_at, author }) => (
                 <Stack key={id} wrap="nowrap" gap={6} style={{ marginBottom: 10 }}>

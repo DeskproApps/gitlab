@@ -5,14 +5,14 @@ import { MergeRequests } from "./MergeRequests";
 import type { FC } from "react";
 import type { Props } from "./types";
 
-const ViewIssue: FC<Props> = ({ issue, project, comments, mergeRequests }) => {
+const ViewIssue: FC<Props> = ({ issue, project, comments, mergeRequests, onCreateIssueComment }) => {
     return (
         <>
             <Info issue={issue} project={project} />
             <HorizontalDivider style={{ margin: "10px 0" }} />
             <MergeRequests mergeRequests={mergeRequests} />
             <HorizontalDivider style={{ margin: "10px 0" }} />
-            <Comments comments={comments} />
+            <Comments comments={comments} onCreateIssueComment={onCreateIssueComment} />
         </>
     );
 };
