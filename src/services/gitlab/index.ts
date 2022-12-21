@@ -13,3 +13,4 @@ export { getIssueCommentsService } from "./getIssueCommentsService";
 export { getIssueMergeRequestsService } from "./getIssueMergeRequestsService";
 export { getProjectMilestoneService } from "./getProjectMilestoneService";
 export { editIssueService } from "./editIssueService";
+export { createIssueCommentService } from "./createIssueCommentService";

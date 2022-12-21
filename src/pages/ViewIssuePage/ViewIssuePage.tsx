@@ -22,8 +22,6 @@ const ViewIssuePage: FC = () => {
         mergeRequests,
     } = useLoadIssueDeps(issueIid, projectId);
 
-    console.log(">>>", { issueIid, projectId });
-
     const onCreateIssueComment = useCallback(() => {
         navigate({
             pathname: "/create-issue-comment",
