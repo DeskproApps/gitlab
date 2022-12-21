@@ -10,4 +10,5 @@ export type Props = {
     project: Project,
     comments: IssueComment[],
     mergeRequests: MergeRequest[],
+    onCreateIssueComment: () => void,
 };

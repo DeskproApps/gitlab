@@ -21,6 +21,7 @@ import {
     ViewIssuePage,
     EditIssuePage,
     CreateIssuePage,
+    CreateIssueCommentPage,
 } from "./pages";
 import { ErrorFallback } from "./components";
 import { useLogout, useUnlinkIssue } from "./hooks";
@@ -94,6 +95,7 @@ const App = () => {
                               <Route path="/view-issue" element={<ViewIssuePage/>} />
                               <Route path="/create-issue" element={<CreateIssuePage/>} />
                               <Route path="/edit-issue" element={<EditIssuePage/>} />
+                              <Route path="/create-issue-comment" element={<CreateIssueCommentPage/>} />
                               <Route index element={<Main/>} />
                           </Routes>
                       </ErrorBoundary>
