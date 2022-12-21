@@ -16,7 +16,7 @@ import type { Props } from "./types";
 const MR: FC<MergeRequest & { isLast: boolean }> = ({ isLast, title, web_url, state, created_at }) => {
     return (
         <>
-            <Title title={title} link={web_url} />
+            <Title title={title} link={web_url} marginBottom={0} />
             <TwoProperties
                 leftText={<State state={state} />}
                 rightText={format(created_at)}
