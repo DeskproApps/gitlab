@@ -8,8 +8,8 @@ type Data = {
 
 const createIssueCommentService = (
     client: IDeskproClient,
-    projectId: Project["id"],
-    issueIid: Issue["iid"],
+    projectId: Project["id"]|string,
+    issueIid: Issue["iid"]|string,
     data: Data,
 ) => {
     return baseRequest(client, {
