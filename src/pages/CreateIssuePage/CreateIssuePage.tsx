@@ -10,9 +10,9 @@ import {
     useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { setEntityIssueService } from "../../services/entityAssociation";
-import { createIssueService } from "../../services/gitlab";
-import { useSetTitle } from "../../hooks";
-import { getEntityId } from "../../utils";
+import { createIssueService, createIssueCommentService } from "../../services/gitlab";
+import { useSetTitle, useDeskproLabel } from "../../hooks";
+import { getEntityId, getAutomatedLinkedComment } from "../../utils";
 import { Container } from "../../components/common";
 import { IssueForm, getIssueValues } from "../../components/IssueForm";
 import type { FC } from "react";
@@ -22,8 +22,11 @@ const CreateIssuePage: FC = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
+    const { addDeskproLabel } = useDeskproLabel();
 
     const ticketId = get(context, ["data", "ticket", "id"]);
+    const permalink = get(context, ["data", "ticket", "permalinkUrl"]);
+    const dontAddComment = get(context, ["settings", "dont_add_comment_when_linking_issue"]) === true;
 
     const onNavigateToLinkIssue = useCallback(() => navigate("/link"), [navigate]);
 
@@ -54,9 +57,15 @@ const CreateIssuePage: FC = () => {
         const projectId = data.project.value;
 
         return createIssueService(client, projectId, getIssueValues(data))
-            .then((issue) => {
-                return setEntityIssueService(client, ticketId, getEntityId(issue))
-            })
+            .then((issue) => Promise.all([
+                setEntityIssueService(client, ticketId, getEntityId(issue)),
+                addDeskproLabel(projectId, issue.iid),
+                dontAddComment
+                    ? Promise.resolve()
+                    : createIssueCommentService(client, projectId, issue.iid, {
+                        body: getAutomatedLinkedComment(ticketId, permalink)
+                    })
+            ]))
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore ToDo: need to fix typings in @app-sdk
             .then((isSuccess: boolean) => {
@@ -64,7 +73,7 @@ const CreateIssuePage: FC = () => {
                     navigate("/home")
                 }
             });
-    }, [client, ticketId, navigate]);
+    }, [client, ticketId, permalink, addDeskproLabel, dontAddComment, navigate]);
 
     return (
         <Container>

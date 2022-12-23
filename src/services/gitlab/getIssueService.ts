@@ -8,7 +8,7 @@ const getIssueService = (
     projectId: Issue["project_id"]|string,
     issueIid: Issue["iid"]|string,
 ) => {
-    return baseRequest<Issue>(client, {
+    return baseRequest<Issue[]>(client, {
         url: `/projects/${projectId}/issues?${createSearchParams([
             ["iids[]", `${issueIid}`],
             ["with_labels_details", `true`],

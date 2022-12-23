@@ -3,8 +3,8 @@ import type { IDeskproClient } from "@deskpro/app-sdk";
 import type { Issue, Project } from "./types";
 
 type Data = {
-    title: string,
-    description: string,
+    title?: string,
+    description?: string,
     issue_type?: string,
     milestone_id?: number,
     assignee_id?: number,
@@ -17,7 +17,7 @@ const editIssueService = (
     issueIid: Issue["iid"],
     data: Data,
 ) => {
-    return baseRequest(client, {
+    return baseRequest<Issue>(client, {
         url: `/projects/${projectId}/issues/${issueIid}`,
         method: "PUT",
         data,

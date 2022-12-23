@@ -40,6 +40,8 @@ const useLoadDependentData: UseLoadDependentData = () => {
             .catch(() => {});
     });
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore need to fix hook typings
     const issues = useQueriesWithClient<Issue>(entityIds.map((entity) => {
         const [projectId, issueIid] = entity.split(":");
 

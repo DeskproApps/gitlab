@@ -10,11 +10,12 @@ import {
 } from "@deskpro/app-sdk";
 import { LinkIssue } from "../../components";
 import { Container } from "../../components/common";
-import { useSetTitle } from "../../hooks";
+import { useSetTitle, useDeskproLabel } from "../../hooks";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
-import { getOption, getEntityId } from "../../utils";
-import type { Option } from "../../types";
+import { createIssueCommentService } from "../../services/gitlab";
+import { getOption, getEntityId, getAutomatedLinkedComment } from "../../utils";
+import type { Option, TicketContext } from "../../types";
 import type { Issue } from "../../services/gitlab/types";
 
 const getFilteredIssues = (issues: Issue[], selectedProject: Option<Issue["project_id"]|"any">) => {
@@ -28,7 +29,8 @@ const getFilteredIssues = (issues: Issue[], selectedProject: Option<Issue["proje
 const LinkPage: FC = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
-    const { context } = useDeskproLatestAppContext();
+    const { context } = useDeskproLatestAppContext() as { context: TicketContext };
+    const { addDeskproLabel } = useDeskproLabel();
 
     const [search, setSearch] = useState<string>("");
     const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
@@ -37,6 +39,8 @@ const LinkPage: FC = () => {
     const { isLoading, isFetching, issues, projectOptions } = useSearch(search);
 
     const ticketId = get(context, ["data", "ticket", "id"]);
+    const permalink = get(context, ["data", "ticket", "permalinkUrl"]);
+    const dontAddComment = get(context, ["settings", "dont_add_comment_when_linking_issue"]) === true;
 
     const onNavigateToCreateIssue = useCallback(() => navigate("/create-issue"), [navigate]);
 
@@ -87,17 +91,34 @@ const LinkPage: FC = () => {
         navigate("/home");
     };
 
-    const onLinkIssues = () => {
+    const onLinkIssues = useCallback(() => {
         if (!client || !ticketId || selectedIssues.length === 0) {
             return;
         }
 
         Promise
-            .all(selectedIssues.map((entity) =>
-                setEntityIssueService(client, ticketId, entity)
-            ))
+            .all([
+                ...selectedIssues.map((entity) => setEntityIssueService(client, ticketId, entity)),
+                ...selectedIssues.map((entity) => {
+                    const [projectId, issueIid] = entity.split(":");
+                    return addDeskproLabel(projectId, issueIid);
+                }),
+                ...(dontAddComment
+                    ? [Promise.resolve()]
+                    : selectedIssues.map((entity) => {
+                        const [projectId, issueIid] = entity.split(":");
+                        return createIssueCommentService(client, projectId, issueIid, {
+                            body: getAutomatedLinkedComment(ticketId, permalink),
+                        })
+                    })
+                ),
+                ...selectedIssues.map((entity) => {
+                    const [projectId, issueIid] = entity.split(":");
+                    return addDeskproLabel(projectId, issueIid);
+                })
+            ])
             .then(() => navigate("/home"))
-    };
+    }, [navigate, client, ticketId, permalink, selectedIssues, dontAddComment, addDeskproLabel]);
 
     return (
         <Container>

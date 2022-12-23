@@ -15,6 +15,8 @@ export type Option<Value = unknown> = Omit<DropdownValueType<Value>, "subItems">
 export type Settings = {
     app_id: string,
     gitlab_instance_url: Maybe<string>,
+    dont_add_comment_when_linking_issue: boolean,
+    dont_add_deskpro_label: boolean,
 };
 
 export type TicketData = {
