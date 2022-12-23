@@ -49,7 +49,9 @@ const useCheckLinkedIssues = () => {
         }
     }, [ticketId]);
 
-    const issues = useQueriesWithClient<Issue>((entityIds || []).map((entity) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Need to fix hook typings
+    const issues = useQueriesWithClient<Issue[]>((entityIds || []).map((entity) => {
         const [projectId, issueIid] = entity.split(":");
 
         return {

@@ -58,6 +58,14 @@
       "isBackendOnly": false,
       "order": 40
     },
+    "dont_add_deskpro_label": {
+      "title": "Do not add \"Deskpro\" label when creating or linking Issue",
+      "description": "Disable automatically adding a label to indicate in GitLab that the issue is currently linked to a Deskpro ticket",
+      "type": "boolean",
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 50
+    },
     "callback_url": {
       "title": "",
       "type": "app_embedded",

@@ -11,7 +11,7 @@ import {
 } from "@deskpro/app-sdk";
 import { setEntityIssueService } from "../../services/entityAssociation";
 import { createIssueService, createIssueCommentService } from "../../services/gitlab";
-import { useSetTitle } from "../../hooks";
+import { useSetTitle, useDeskproLabel } from "../../hooks";
 import { getEntityId, getAutomatedLinkedComment } from "../../utils";
 import { Container } from "../../components/common";
 import { IssueForm, getIssueValues } from "../../components/IssueForm";
@@ -22,6 +22,7 @@ const CreateIssuePage: FC = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
+    const { addDeskproLabel } = useDeskproLabel();
 
     const ticketId = get(context, ["data", "ticket", "id"]);
     const permalink = get(context, ["data", "ticket", "permalinkUrl"]);
@@ -58,6 +59,7 @@ const CreateIssuePage: FC = () => {
         return createIssueService(client, projectId, getIssueValues(data))
             .then((issue) => Promise.all([
                 setEntityIssueService(client, ticketId, getEntityId(issue)),
+                addDeskproLabel(projectId, issue.iid),
                 dontAddComment
                     ? Promise.resolve()
                     : createIssueCommentService(client, projectId, issue.iid, {
@@ -71,7 +73,7 @@ const CreateIssuePage: FC = () => {
                     navigate("/home")
                 }
             });
-    }, [client, ticketId, permalink, dontAddComment, navigate]);
+    }, [client, ticketId, permalink, addDeskproLabel, dontAddComment, navigate]);
 
     return (
         <Container>

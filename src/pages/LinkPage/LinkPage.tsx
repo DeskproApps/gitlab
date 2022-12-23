@@ -10,7 +10,7 @@ import {
 } from "@deskpro/app-sdk";
 import { LinkIssue } from "../../components";
 import { Container } from "../../components/common";
-import { useSetTitle } from "../../hooks";
+import { useSetTitle, useDeskproLabel } from "../../hooks";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
 import { createIssueCommentService } from "../../services/gitlab";
@@ -30,6 +30,7 @@ const LinkPage: FC = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext() as { context: TicketContext };
+    const { addDeskproLabel } = useDeskproLabel();
 
     const [search, setSearch] = useState<string>("");
     const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
@@ -98,6 +99,10 @@ const LinkPage: FC = () => {
         Promise
             .all([
                 ...selectedIssues.map((entity) => setEntityIssueService(client, ticketId, entity)),
+                ...selectedIssues.map((entity) => {
+                    const [projectId, issueIid] = entity.split(":");
+                    return addDeskproLabel(projectId, issueIid);
+                }),
                 ...(dontAddComment
                     ? [Promise.resolve()]
                     : selectedIssues.map((entity) => {
@@ -107,9 +112,13 @@ const LinkPage: FC = () => {
                         })
                     })
                 ),
+                ...selectedIssues.map((entity) => {
+                    const [projectId, issueIid] = entity.split(":");
+                    return addDeskproLabel(projectId, issueIid);
+                })
             ])
             .then(() => navigate("/home"))
-    }, [navigate, client, ticketId, permalink, selectedIssues, dontAddComment]);
+    }, [navigate, client, ticketId, permalink, selectedIssues, dontAddComment, addDeskproLabel]);
 
     return (
         <Container>
