@@ -30,7 +30,7 @@ import type { EventPayload } from "./types";
 const App = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
-    const { logout } = useLogout();
+    const { logout, isLoading } = useLogout();
     const { unlinkIssue } = useUnlinkIssue();
 
     useDeskproElements(({ registerElement }) => {
@@ -74,7 +74,7 @@ const App = () => {
         onTargetAction: debounceTargetAction,
     }, [client]);
 
-    if (!client) {
+    if (!client || isLoading) {
       return (
           <LoadingSpinner/>
       );
