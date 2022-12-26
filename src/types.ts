@@ -1,3 +1,4 @@
+import type { ParamKeyValuePair } from "react-router-dom";
 import type { Context, IDeskproClient, DropdownValueType } from "@deskpro/app-sdk";
 import type { Issue } from "./services/gitlab/types";
 
@@ -73,12 +74,13 @@ export type TicketContext = Context<TicketData, Maybe<Settings>>;
 export type ApiRequestMethod = "GET" | "POST" | "PUT";
 
 export type RequestParams = {
-    url: string,
+    url?: string,
+    rawUrl?: string,
     method?: ApiRequestMethod,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any,
     headers?: Dict<string>,
-    queryParams?: Dict<string>,
+    queryParams?: Dict<string>|ParamKeyValuePair[],
 };
 
 export type Request = <T>(

@@ -3,10 +3,12 @@ import isEmpty from "lodash/isEmpty";
 import { proxyFetch } from "@deskpro/app-sdk";
 import { REST_URL, placeholders } from "./constants";
 import { GitLabError } from "./GitLabError";
+import type { ParamKeyValuePair } from "react-router-dom";
 import type { Request } from "../../types";
 
 const baseRequest: Request = async (client, {
     url,
+    rawUrl,
     data = {},
     method = "GET",
     queryParams = {},
@@ -14,9 +16,11 @@ const baseRequest: Request = async (client, {
 }) => {
     const dpFetch = await proxyFetch(client);
 
-    const baseUrl = `${REST_URL}${url}`;
-    /** ToDo: transform queryParams from object to array [[key, value], [key, value]] */
-    const params = `${isEmpty(queryParams) ? "" : `?${createSearchParams(queryParams)}`}`;
+    const baseUrl = rawUrl ? rawUrl : `${REST_URL}${url}`;
+    const parsedQueryParams = Array.isArray(queryParams)
+        ? queryParams
+        : Object.keys(queryParams).map<ParamKeyValuePair>((key) => ([key, queryParams[key]]));
+    const params = `${isEmpty(parsedQueryParams) ? "" : `?${createSearchParams(parsedQueryParams)}`}`;
     const requestUrl = `${baseUrl}${params}`;
     const options: RequestInit = {
         method,
