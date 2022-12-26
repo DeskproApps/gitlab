@@ -10,11 +10,10 @@ import {
 } from "@deskpro/app-sdk";
 import { LinkIssue } from "../../components";
 import { Container } from "../../components/common";
-import { useSetTitle, useDeskproLabel } from "../../hooks";
+import { useSetTitle, useDeskproLabel, useAutomatedComment } from "../../hooks";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
-import { createIssueCommentService } from "../../services/gitlab";
-import { getOption, getEntityId, getAutomatedLinkedComment } from "../../utils";
+import { getOption, getEntityId } from "../../utils";
 import type { Option, TicketContext } from "../../types";
 import type { Issue } from "../../services/gitlab/types";
 
@@ -30,6 +29,7 @@ const LinkPage: FC = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext() as { context: TicketContext };
+    const { createAutomatedLinkedComment } = useAutomatedComment();
     const { addDeskproLabel } = useDeskproLabel();
 
     const [search, setSearch] = useState<string>("");
@@ -39,8 +39,6 @@ const LinkPage: FC = () => {
     const { isLoading, isFetching, issues, projectOptions } = useSearch(search);
 
     const ticketId = get(context, ["data", "ticket", "id"]);
-    const permalink = get(context, ["data", "ticket", "permalinkUrl"]);
-    const dontAddComment = get(context, ["settings", "dont_add_comment_when_linking_issue"]) === true;
 
     const onNavigateToCreateIssue = useCallback(() => navigate("/create-issue"), [navigate]);
 
@@ -103,22 +101,17 @@ const LinkPage: FC = () => {
                     const [projectId, issueIid] = entity.split(":");
                     return addDeskproLabel(projectId, issueIid);
                 }),
-                ...(dontAddComment
-                    ? [Promise.resolve()]
-                    : selectedIssues.map((entity) => {
-                        const [projectId, issueIid] = entity.split(":");
-                        return createIssueCommentService(client, projectId, issueIid, {
-                            body: getAutomatedLinkedComment(ticketId, permalink),
-                        })
-                    })
-                ),
+                ...selectedIssues.map((entity) => {
+                    const [projectId, issueIid] = entity.split(":");
+                    return createAutomatedLinkedComment(projectId, issueIid);
+                }),
                 ...selectedIssues.map((entity) => {
                     const [projectId, issueIid] = entity.split(":");
                     return addDeskproLabel(projectId, issueIid);
                 })
             ])
             .then(() => navigate("/home"))
-    }, [navigate, client, ticketId, permalink, selectedIssues, dontAddComment, addDeskproLabel]);
+    }, [navigate, client, ticketId, selectedIssues, addDeskproLabel, createAutomatedLinkedComment]);
 
     return (
         <Container>
