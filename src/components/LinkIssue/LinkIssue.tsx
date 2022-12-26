@@ -4,7 +4,6 @@ import {
     Checkbox,
     HorizontalDivider,
 } from "@deskpro/app-sdk";
-import { getEntityId } from "../../utils";
 import {
     Card,
     Button,
@@ -29,7 +28,7 @@ type Props = {
     onClear: SearchProps["onClear"],
     selectedProject: Option<string|Issue["project_id"]>,
     onChangeSelect: (o: Option<Issue["project_id"]|"any">) => void,
-    selectedIssues: string[],
+    selectedIssues: Issue[],
     projectOptions: Array<Option<string|Issue["project_id"]>>,
     onLinkIssues: () => void,
     onCancel: () => void,
@@ -95,7 +94,7 @@ const LinkIssue: FC<Props> = ({
                                 <CardMedia>
                                     <Checkbox
                                         size={12}
-                                        checked={selectedIssues.includes(getEntityId(issue))}
+                                        checked={selectedIssues.some(({ id }) => issue.id === id)}
                                         onChange={() => onChangeSelectedIssue(issue)}
                                         containerStyle={{ marginTop: 2 }}
                                     />

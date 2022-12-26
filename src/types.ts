@@ -1,6 +1,6 @@
 import type { ParamKeyValuePair } from "react-router-dom";
 import type { Context, IDeskproClient, DropdownValueType } from "@deskpro/app-sdk";
-import type { Issue } from "./services/gitlab/types";
+import type { Issue, Milestone, Project, Member, Label } from "./services/gitlab/types";
 
 export type Maybe<T> = T | undefined | null;
 
@@ -96,3 +96,21 @@ export type EventPayload =
         projectId: Issue["project_id"],
     }}
 ;
+
+export type EntityMetadata = {
+    id: Issue["id"]|string,
+    iid: Issue["iid"]|string,
+    title: Issue["title"],
+    project: Project["name"],
+    milestone: Milestone["title"],
+    assignees: Array<{
+        username: Member["username"],
+        name: Member["name"],
+    }>,
+    labels: Array<{
+        id: Label["id"],
+        name: Label["name"],
+    }>,
+    createdAt: DateTime,
+    updatedAt: DateTime,
+};

@@ -1,4 +1,5 @@
 import { FC, ChangeEvent, useState, useCallback } from "react";
+import cloneDeep from "lodash/cloneDeep";
 import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import get from "lodash/get";
@@ -13,7 +14,7 @@ import { Container } from "../../components/common";
 import { useSetTitle, useDeskproLabel, useAutomatedComment } from "../../hooks";
 import { useSearch } from "./hooks";
 import { setEntityIssueService } from "../../services/entityAssociation";
-import { getOption, getEntityId } from "../../utils";
+import { getOption, getEntityId, getEntityMetadata } from "../../utils";
 import type { Option, TicketContext } from "../../types";
 import type { Issue } from "../../services/gitlab/types";
 
@@ -33,7 +34,7 @@ const LinkPage: FC = () => {
     const { addDeskproLabel } = useDeskproLabel();
 
     const [search, setSearch] = useState<string>("");
-    const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
+    const [selectedIssues, setSelectedIssues] = useState<Issue[]>([]);
     const [selectedProject, setSelectedProject] = useState<Option<Issue["project_id"]|"any">>(getOption("any", "Any"));
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -77,12 +78,15 @@ const LinkPage: FC = () => {
     };
 
     const onChangeSelectedIssue = (issue: Issue) => {
-        let newSelectedIssues = [...selectedIssues];
-        if (selectedIssues.includes(getEntityId(issue))) {
-            newSelectedIssues = selectedIssues.filter((selectedIssueId) => selectedIssueId !== getEntityId(issue));
+        let newSelectedIssues = cloneDeep(selectedIssues);
+
+        if (selectedIssues.some(({ id }) => issue.id === id)) {
+            newSelectedIssues = selectedIssues.filter((selectedIssue) => selectedIssue.id !== issue.id);
         } else {
-            newSelectedIssues.push(getEntityId(issue));
+            newSelectedIssues.push(issue);
         }
+
+
         setSelectedIssues(newSelectedIssues);
     };
 
@@ -98,25 +102,21 @@ const LinkPage: FC = () => {
         setIsSubmitting(true);
         Promise
             .all([
-                ...selectedIssues.map((entity) => setEntityIssueService(client, ticketId, entity)),
-                ...selectedIssues.map((entity) => {
-                    const [projectId, issueIid] = entity.split(":");
-                    return addDeskproLabel(projectId, issueIid);
-                }),
-                ...selectedIssues.map((entity) => {
-                    const [projectId, issueIid] = entity.split(":");
-                    return createAutomatedLinkedComment(projectId, issueIid);
-                }),
-                ...selectedIssues.map((entity) => {
-                    const [projectId, issueIid] = entity.split(":");
-                    return addDeskproLabel(projectId, issueIid);
-                })
+                ...selectedIssues.map((issue) => setEntityIssueService(
+                    client,
+                    ticketId,
+                    getEntityId(issue),
+                    getEntityMetadata(issue, projectOptions),
+                )),
+                ...selectedIssues.map(({ project_id, iid }) => addDeskproLabel(project_id, iid)),
+                ...selectedIssues.map(({ project_id, iid }) => createAutomatedLinkedComment(project_id, iid)),
+                ...selectedIssues.map(({ project_id, iid }) => addDeskproLabel(project_id, iid))
             ])
             .then(() => {
                 setIsSubmitting(false);
                 navigate("/home");
             })
-    }, [navigate, client, ticketId, selectedIssues, addDeskproLabel, createAutomatedLinkedComment]);
+    }, [navigate, client, ticketId, selectedIssues, addDeskproLabel, createAutomatedLinkedComment, projectOptions]);
 
     return (
         <Container>

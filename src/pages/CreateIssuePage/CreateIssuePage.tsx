@@ -12,7 +12,7 @@ import {
 import { setEntityIssueService } from "../../services/entityAssociation";
 import { createIssueService } from "../../services/gitlab";
 import { useSetTitle, useDeskproLabel, useAutomatedComment } from "../../hooks";
-import { getEntityId } from "../../utils";
+import { getEntityId, getEntityMetadata } from "../../utils";
 import { Container } from "../../components/common";
 import { IssueForm, getIssueValues } from "../../components/IssueForm";
 import type { FC } from "react";
@@ -57,7 +57,12 @@ const CreateIssuePage: FC = () => {
 
         return createIssueService(client, projectId, getIssueValues(data))
             .then((issue) => Promise.all([
-                setEntityIssueService(client, ticketId, getEntityId(issue)),
+                setEntityIssueService(
+                    client,
+                    ticketId,
+                    getEntityId(issue),
+                    getEntityMetadata(issue, [data.project])
+                ),
                 addDeskproLabel(projectId, issue.iid),
                 createAutomatedLinkedComment(projectId, issue.iid),
             ]))

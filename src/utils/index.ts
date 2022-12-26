@@ -9,3 +9,4 @@ export {
     getAutomatedLinkedComment,
     getAutomatedUnlinkedComment,
 } from "./getAutomatedLinkedComment";
+export { getEntityMetadata } from "./getEntityMetadata";
