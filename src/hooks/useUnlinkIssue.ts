@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import get from "lodash/get";
 import { useDeskproAppClient, useDeskproLatestAppContext } from "@deskpro/app-sdk";
@@ -9,20 +9,28 @@ import { queryClient, QueryKey } from "../query";
 import type { TicketContext } from "../types";
 import type { Issue, Project } from "../services/gitlab/types";
 
-type UnlinkArgs = { issueIid: Issue["id"], projectId: Project["id"] };
+type UseUnlinkIssue = () => {
+    isLoading: boolean,
+    unlinkIssue: (args: { issueIid: Issue["id"], projectId: Project["id"] }) => void,
+};
 
-const useUnlinkIssue = () => {
+const useUnlinkIssue: UseUnlinkIssue = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext() as { context: TicketContext };
     const { createAutomatedUnlinkedComment } = useAutomatedComment();
     const { removeDeskproLabel } = useDeskproLabel();
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const ticketId = get(context, ["data", "ticket", "id"]);
 
-    const unlinkIssue = useCallback(({ issueIid, projectId }: UnlinkArgs): void => {
+    const unlinkIssue = useCallback(({ issueIid, projectId }): void => {
         if (!issueIid || !projectId || !client || !ticketId) {
             return;
         }
+
+        setIsLoading(true);
 
         deleteEntityIssueService(client, ticketId, getEntityId({ project_id: projectId, iid: issueIid }))
             .then(() => {
@@ -34,13 +42,12 @@ const useUnlinkIssue = () => {
                 ])
             })
             .then(() => {
-                navigate("/home")
+                setIsLoading(false);
+                navigate("/home");
             });
     }, [client, ticketId, navigate, removeDeskproLabel, createAutomatedUnlinkedComment]);
 
-    return {
-        unlinkIssue,
-    };
+    return { unlinkIssue, isLoading };
 };
 
 export { useUnlinkIssue };

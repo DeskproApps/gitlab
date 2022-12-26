@@ -30,8 +30,10 @@ import type { EventPayload } from "./types";
 const App = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
-    const { logout, isLoading } = useLogout();
-    const { unlinkIssue } = useUnlinkIssue();
+    const { logout, isLoading: isLoadingLogout } = useLogout();
+    const { unlinkIssue, isLoading: isLoadingUnlink } = useUnlinkIssue();
+
+    const isLoading = [isLoadingUnlink, isLoadingLogout].some((isLoading) => isLoading);
 
     useDeskproElements(({ registerElement }) => {
         registerElement("refresh", { type: "refresh_button" });
