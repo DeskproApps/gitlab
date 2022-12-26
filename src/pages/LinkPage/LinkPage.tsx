@@ -35,6 +35,7 @@ const LinkPage: FC = () => {
     const [search, setSearch] = useState<string>("");
     const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
     const [selectedProject, setSelectedProject] = useState<Option<Issue["project_id"]|"any">>(getOption("any", "Any"));
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const { isLoading, isFetching, issues, projectOptions } = useSearch(search);
 
@@ -94,6 +95,7 @@ const LinkPage: FC = () => {
             return;
         }
 
+        setIsSubmitting(true);
         Promise
             .all([
                 ...selectedIssues.map((entity) => setEntityIssueService(client, ticketId, entity)),
@@ -110,7 +112,10 @@ const LinkPage: FC = () => {
                     return addDeskproLabel(projectId, issueIid);
                 })
             ])
-            .then(() => navigate("/home"))
+            .then(() => {
+                setIsSubmitting(false);
+                navigate("/home");
+            })
     }, [navigate, client, ticketId, selectedIssues, addDeskproLabel, createAutomatedLinkedComment]);
 
     return (
@@ -129,6 +134,7 @@ const LinkPage: FC = () => {
                 onClear={onClearSearch}
                 isFetching={isFetching}
                 isLoading={isLoading}
+                isSubmitting={isSubmitting}
                 value={search}
                 selectedProject={selectedProject}
                 onChangeSelect={onChangeSelect}
