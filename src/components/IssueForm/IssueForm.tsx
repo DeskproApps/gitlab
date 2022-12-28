@@ -37,11 +37,11 @@ const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }
         type,
         project,
         milestone,
-        assignees,
+        assignee,
         labels,
     // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
     // @ts-ignore will fix in v8 https://github.com/react-hook-form/react-hook-form/issues/4055#issuecomment-1171531617
-    ] = watch(["title", "description", "type", "project", "milestone", "assignees", "labels"]);
+    ] = watch(["title", "description", "type", "project", "milestone", "assignee", "labels"]);
 
     const {
         isLoading,
@@ -102,10 +102,10 @@ const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }
             />
 
             <MembersField
-                value={assignees}
+                value={assignee}
                 options={memberOptions}
-                error={has(errors, ["assignees", "value", "message"])}
-                onChange={(option) => setValue("assignees", option)}
+                error={has(errors, ["assignee", "value", "message"])}
+                onChange={(option) => setValue("assignee", option.value)}
             />
 
             <LabelsField

@@ -26,12 +26,7 @@ const validationSchema = yup.object().shape({
         value: yup.string(),
         type: yup.string().oneOf(["value"]),
     }),
-    assignees: yup.object().shape({
-        key: yup.string(),
-        label: yup.string(),
-        value: yup.string(),
-        type: yup.string().oneOf(["value"]),
-    }),
+    assignee: yup.number(),
     labels: yup.array(yup.string()),
 });
 
@@ -43,7 +38,6 @@ const getInitValues = (params: InitParams = {}): FormInput => {
     const milestoneTitle = get(params, ["issue","milestone", "title"]);
     const labels = (get(params, ["issue", "labels"]) || []).map(({ name }: Label) => name);
     const assigneeId = get(params, ["issue", "assignee", "id"]);
-    const assigneeName = get(params, ["issue", "assignee", "name"]);
 
     return {
         title: get(params, ["issue", "title"], ""),
@@ -51,19 +45,21 @@ const getInitValues = (params: InitParams = {}): FormInput => {
         type: get(issueTypes, [get(params, ["issue", "issue_type"])], getOption("issue", "Issue")),
         project: (projectId && projectName) ? getOption(projectId, projectName) : getOption(0, ""),
         milestone: (milestoneId && milestoneTitle) ? getOption(milestoneId, milestoneTitle) : getOption(0, ""),
-        assignees: (assigneeId && assigneeName) ? getOption(assigneeId, assigneeName) : getOption(0, ""),
+        assignee: assigneeId || 0,
         labels: Array.isArray(labels) ? labels : [],
     };
 };
 
-const getIssueValues = (data: FormInput): IssueValues => ({
-    title: data.title,
-    description: data.description,
-    ...(isEmpty(data.type.value) ? {} : { issue_type: data.type.value }),
-    ...(isEmpty(data.milestone.value) ? {} : { milestone_id: data.milestone.value }),
-    ...(isEmpty(data.assignees.value) ? {} : { assignee_id: data.assignees.value }),
-    ...(isEmpty(data.labels) ? {} : { labels: data.labels.join(",") }),
-});
+const getIssueValues = (data: FormInput): IssueValues => {
+    return {
+        title: data.title,
+        description: data.description,
+        ...(isEmpty(data.type.value) ? {} : { issue_type: data.type.value }),
+        ...(isEmpty(data.milestone.value) ? {} : { milestone_id: data.milestone.value }),
+        ...(!data.assignee ? {} : { assignee_id: data.assignee }),
+        ...(isEmpty(data.labels) ? {} : { labels: data.labels.join(",") }),
+    }
+};
 
 export {
     getInitValues,

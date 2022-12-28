@@ -8,7 +8,7 @@ export type FormInput = {
     type: Option<IssueType>,
     project: Option<Project["id"]>,
     milestone: Option<Milestone["id"]>,
-    assignees: Option<Member["id"]>,
+    assignee: Member["id"],
     labels: Array<Label["name"]>,
 };
 

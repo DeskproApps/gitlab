@@ -1,19 +1,24 @@
 import { useState } from "react";
+import get from "lodash/get";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
 import { Dropdown, DropdownTargetProps } from "@deskpro/app-sdk";
 import { Label } from "../../common";
 import type { FC } from "react";
+import type { DropdownValueType } from "@deskpro/app-sdk";
 import type { Option } from "../../../types";
 import type { Member } from "../../../services/gitlab/types";
 
+type SelectedMember = DropdownValueType<Member["id"]> | undefined;
+
 const MembersField: FC<{
-    value: Option<Member["id"]>,
+    value: Member["id"],
     options: Array<Option<Member["id"]>>,
     error: boolean,
     onChange: (o: Option<Member["id"]>) => void,
 }> = ({ value, options, error, onChange }) => {
     const [inputSearch, setInputSearch] = useState<string>("");
+    const selectedMember: SelectedMember = options.find(({ value: memberId }) => memberId === value);
 
     return (
         <Dropdown
@@ -24,30 +29,28 @@ const MembersField: FC<{
             externalLinkIcon={faExternalLinkAlt}
             placement="bottom-start"
             hideIcons
-            options={options.filter(({ label }) => {
-                return (label as string).toLowerCase().includes(inputSearch.toLowerCase());
+            options={options.filter(({ description }) => {
+                return (description || "").toLowerCase().includes(inputSearch.toLowerCase());
             })}
             onSelectOption={onChange}
             inputValue={inputSearch}
             onInputChange={(value) => setInputSearch(value)}
         >
-            {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) => {
-                return (
-                    <Label htmlFor="assignees" label="Assignees">
-                        <DivAsInputWithDisplay
-                            id="assignees"
-                            placeholder="Select Value"
-                            value={value.label || ""}
-                            variant="inline"
-                            rightIcon={faCaretDown}
-                            error={error}
-                            ref={targetRef}
-                            {...targetProps}
-                            isVisibleRightIcon={false}
-                        />
-                    </Label>
-                )
-            }}
+            {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) => (
+                <Label htmlFor="assignee" label="Assignee">
+                    <DivAsInputWithDisplay
+                        id="assignee"
+                        placeholder="Select Value"
+                        value={get(selectedMember, ["label"], "")}
+                        variant="inline"
+                        rightIcon={faCaretDown}
+                        error={error}
+                        ref={targetRef}
+                        {...targetProps}
+                        isVisibleRightIcon={false}
+                    />
+                </Label>
+            )}
         </Dropdown>
     );
 };
