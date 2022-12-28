@@ -1,4 +1,4 @@
-import type { Maybe, DateTime } from "../../types";
+import type { Maybe, DateTime, Dict } from "../../types";
 
 export type OAuthToken = {
     token_type: "Bearer",
@@ -188,3 +188,13 @@ export type MergeRequest = {
     updated_at: DateTime,
     created_at: DateTime,
 };
+
+export interface ErrorWithMessage { message: string | Dict<string | string[]> }
+
+export interface ErrorWithDescription {
+    error: string,
+    error_description: string,
+    scope?: string,
+}
+
+export type GitLabErrors = ErrorWithMessage | ErrorWithDescription;

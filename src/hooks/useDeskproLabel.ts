@@ -15,8 +15,8 @@ import type { TicketContext } from "../types";
 import type { Issue, Project, Label } from "../services/gitlab/types";
 
 type UseDeskproLabel = () => {
-    addDeskproLabel: (projectId: Project["id"]|string, issueIid: Issue["iid"]|string) => Promise<Issue|void>,
-    removeDeskproLabel: (projectId: Project["id"]|string, issueIid: Issue["iid"]|string) => Promise<Issue|void>,
+    addDeskproLabel: (projectId: Project["id"], issueIid: Issue["iid"]) => Promise<Issue|void>,
+    removeDeskproLabel: (projectId: Project["id"], issueIid: Issue["iid"]) => Promise<Issue|void>,
 };
 
 const useDeskproLabel: UseDeskproLabel = () => {
@@ -31,7 +31,7 @@ const useDeskproLabel: UseDeskproLabel = () => {
 
     const dontAddDeskproLabel = get(context, ["settings", "dont_add_deskpro_label"]) === true;
 
-    const addDeskproLabel = useCallback((projectId, issueIid) => {
+    const addDeskproLabel = useCallback((projectId: Project["id"], issueIid: Issue["iid"]) => {
         if (dontAddDeskproLabel || !client) {
             return Promise.resolve();
         }
@@ -52,7 +52,7 @@ const useDeskproLabel: UseDeskproLabel = () => {
             .catch(() => {});
     }, [client, deskproLabel, dontAddDeskproLabel]);
 
-    const removeDeskproLabel = useCallback((projectId, issueIid) => {
+    const removeDeskproLabel = useCallback((projectId: Project["id"], issueIid: Issue["iid"]) => {
         if (dontAddDeskproLabel || !client) {
             return Promise.resolve();
         }

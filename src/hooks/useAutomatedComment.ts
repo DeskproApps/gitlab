@@ -14,12 +14,12 @@ import type { Project, Issue, IssueComment } from "../services/gitlab/types";
 
 type UseAutomatedComment = () => {
     createAutomatedLinkedComment: (
-        projectId: Project["id"]|string,
-        issueIid: Issue["iid"]|string,
+        projectId: Project["id"],
+        issueIid: Issue["iid"],
     ) => Promise<IssueComment|void>,
     createAutomatedUnlinkedComment: (
-        projectId: Project["id"]|string,
-        issueIid: Issue["iid"]|string,
+        projectId: Project["id"],
+        issueIid: Issue["iid"],
     ) => Promise<IssueComment|void>,
 };
 
@@ -30,7 +30,10 @@ const useAutomatedComment: UseAutomatedComment = () => {
     const permalink = get(context, ["data", "ticket", "permalinkUrl"]);
     const dontAddComment = get(context, ["settings", "dont_add_comment_when_linking_issue"]) === true;
 
-    const createAutomatedLinkedComment = useCallback((projectId, issueIid) => {
+    const createAutomatedLinkedComment = useCallback((
+        projectId: Project["id"],
+        issueIid: Issue["iid"],
+    ) => {
         if (!client || dontAddComment || !ticketId) {
             return Promise.resolve();
         }
@@ -40,7 +43,10 @@ const useAutomatedComment: UseAutomatedComment = () => {
         });
     }, [client, dontAddComment, ticketId, permalink]);
 
-    const createAutomatedUnlinkedComment = useCallback((projectId, issueIid) => {
+    const createAutomatedUnlinkedComment = useCallback((
+        projectId: Project["id"],
+        issueIid: Issue["iid"],
+    ) => {
         if (!client || dontAddComment || !ticketId) {
             return Promise.resolve();
         }

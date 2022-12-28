@@ -9,9 +9,11 @@ import { queryClient, QueryKey } from "../query";
 import type { TicketContext } from "../types";
 import type { Issue, Project } from "../services/gitlab/types";
 
+type Args = { issueIid: Issue["id"], projectId: Project["id"] };
+
 type UseUnlinkIssue = () => {
     isLoading: boolean,
-    unlinkIssue: (args: { issueIid: Issue["id"], projectId: Project["id"] }) => void,
+    unlinkIssue: (args: Args) => void,
 };
 
 const useUnlinkIssue: UseUnlinkIssue = () => {
@@ -25,7 +27,7 @@ const useUnlinkIssue: UseUnlinkIssue = () => {
 
     const ticketId = get(context, ["data", "ticket", "id"]);
 
-    const unlinkIssue = useCallback(({ issueIid, projectId }): void => {
+    const unlinkIssue = useCallback(({ issueIid, projectId }: Args) => {
         if (!issueIid || !projectId || !client || !ticketId) {
             return;
         }

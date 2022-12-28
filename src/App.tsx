@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import get from "lodash/get";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import { useQueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { match } from "ts-pattern";
 import {
@@ -29,6 +29,7 @@ import type { EventPayload } from "./types";
 
 const App = () => {
     const navigate = useNavigate();
+    const { reset } = useQueryErrorResetBoundary();
     const { client } = useDeskproAppClient();
     const { logout, isLoading: isLoadingLogout } = useLogout();
     const { unlinkIssue, isLoading: isLoadingUnlink } = useUnlinkIssue();
@@ -84,26 +85,19 @@ const App = () => {
 
     return (
         <Suspense fallback={<LoadingSpinner/>}>
-            <QueryErrorResetBoundary>
-              {({ reset }) => {
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  return (<ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
-                          <Routes>
-                              <Route path="/admin/callback" element={<AdminPage/>} />
-                              <Route path="/login" element={<LoginPage/>} />
-                              <Route path="/home" element={<HomePage/>} />
-                              <Route path="/link" element={<LinkPage/>} />
-                              <Route path="/view-issue" element={<ViewIssuePage/>} />
-                              <Route path="/create-issue" element={<CreateIssuePage/>} />
-                              <Route path="/edit-issue" element={<EditIssuePage/>} />
-                              <Route path="/create-issue-comment" element={<CreateIssueCommentPage/>} />
-                              <Route index element={<Main/>} />
-                          </Routes>
-                      </ErrorBoundary>
-                  )
-              }}
-            </QueryErrorResetBoundary>
+            <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
+                <Routes>
+                    <Route path="/admin/callback" element={<AdminPage/>} />
+                    <Route path="/login" element={<LoginPage/>} />
+                    <Route path="/home" element={<HomePage/>} />
+                    <Route path="/link" element={<LinkPage/>} />
+                    <Route path="/view-issue" element={<ViewIssuePage/>} />
+                    <Route path="/create-issue" element={<CreateIssuePage/>} />
+                    <Route path="/edit-issue" element={<EditIssuePage/>} />
+                    <Route path="/create-issue-comment" element={<CreateIssueCommentPage/>} />
+                    <Route index element={<Main/>} />
+                </Routes>
+            </ErrorBoundary>
             <br/><br/><br/>
         </Suspense>
     );
