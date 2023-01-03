@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import get from "lodash/get";
 import {
     useNavigate,
     useSearchParams,
@@ -8,22 +9,28 @@ import {
     LoadingSpinner,
     useDeskproElements,
     useDeskproAppClient,
+    useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { useSetTitle } from "../../hooks";
 import { useLoadIssueDeps } from "./hooks";
+import { setEntityIssueService } from "../../services/entityAssociation";
 import { editIssueService } from "../../services/gitlab";
+import { getEntityId, getEntityMetadata } from "../../utils";
 import { QueryKey, queryClient } from "../../query";
 import { Container } from "../../components/common";
 import { IssueForm, getIssueValues } from "../../components/IssueForm";
 import type { FC } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import type { FormInput } from "../../components/IssueForm";
+import type { TicketContext } from "../../types";
 
 const EditIssuePage: FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
+    const { context } = useDeskproLatestAppContext() as { context: TicketContext };
 
+    const ticketId = get(context, ["data", "ticket", "id"]);
     const issueIid = Number(searchParams.get("issueIid") || "");
     const projectId = Number(searchParams.get("projectId") || "");
 
@@ -52,11 +59,19 @@ const EditIssuePage: FC = () => {
     }), [navigate, issueIid, projectId]);
 
     const onSubmit: SubmitHandler<FormInput> = useCallback((data) => {
-        if (!client || !issueIid || !projectId) {
+        if (!client || !issueIid || !projectId || !ticketId) {
             return;
         }
 
         return editIssueService(client, projectId, issueIid, getIssueValues(data))
+            .then((issue) => {
+                return setEntityIssueService(
+                    client,
+                    ticketId,
+                    getEntityId(issue),
+                    getEntityMetadata(issue, [data.project]),
+                );
+            })
             .then(() => queryClient.refetchQueries([QueryKey.ISSUES, projectId, issueIid]))
             .then(() => navigate({
                 pathname: "/view-issue",
@@ -65,7 +80,7 @@ const EditIssuePage: FC = () => {
                     ["projectId", `${projectId}`],
                 ])}`
             }));
-    }, [client, navigate, issueIid, projectId]);
+    }, [client, navigate, issueIid, projectId, ticketId]);
 
     if (isLoading) {
         return (

@@ -4,7 +4,6 @@ import {
     Checkbox,
     HorizontalDivider,
 } from "@deskpro/app-sdk";
-import { getEntityId } from "../../utils";
 import {
     Card,
     Button,
@@ -24,11 +23,12 @@ type Props = {
     value: string,
     isLoading: boolean,
     isFetching: boolean,
+    isSubmitting: boolean,
     onChange: SearchProps["onChange"],
     onClear: SearchProps["onClear"],
     selectedProject: Option<string|Issue["project_id"]>,
     onChangeSelect: (o: Option<Issue["project_id"]|"any">) => void,
-    selectedIssues: string[],
+    selectedIssues: Issue[],
     projectOptions: Array<Option<string|Issue["project_id"]>>,
     onLinkIssues: () => void,
     onCancel: () => void,
@@ -39,6 +39,7 @@ type Props = {
 const LinkIssue: FC<Props> = ({
     value,
     isFetching,
+    isSubmitting,
     onChange,
     onClear,
     selectedProject,
@@ -69,7 +70,8 @@ const LinkIssue: FC<Props> = ({
             />
             <Stack justify="space-between" style={{ paddingBottom: "4px" }}>
                 <Button
-                    disabled={selectedIssues.length === 0}
+                    disabled={selectedIssues.length === 0 || isSubmitting}
+                    loading={isSubmitting}
                     text="Link Issue"
                     onClick={onLinkIssues}
                 />
@@ -92,7 +94,7 @@ const LinkIssue: FC<Props> = ({
                                 <CardMedia>
                                     <Checkbox
                                         size={12}
-                                        checked={selectedIssues.includes(getEntityId(issue))}
+                                        checked={selectedIssues.some(({ id }) => issue.id === id)}
                                         onChange={() => onChangeSelectedIssue(issue)}
                                         containerStyle={{ marginTop: 2 }}
                                     />

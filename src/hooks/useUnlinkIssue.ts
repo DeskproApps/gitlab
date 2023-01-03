@@ -1,52 +1,55 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import get from "lodash/get";
 import { useDeskproAppClient, useDeskproLatestAppContext } from "@deskpro/app-sdk";
 import { deleteEntityIssueService } from "../services/entityAssociation";
-import { createIssueCommentService } from "../services/gitlab";
-import { useDeskproLabel } from "../hooks";
-import { getEntityId, getAutomatedUnlinkedComment } from "../utils";
+import { useDeskproLabel, useAutomatedComment } from "../hooks";
+import { getEntityId } from "../utils";
 import { queryClient, QueryKey } from "../query";
 import type { TicketContext } from "../types";
 import type { Issue, Project } from "../services/gitlab/types";
 
-type UnlinkArgs = { issueIid: Issue["id"], projectId: Project["id"] };
+type Args = { issueIid: Issue["id"], projectId: Project["id"] };
 
-const useUnlinkIssue = () => {
+type UseUnlinkIssue = () => {
+    isLoading: boolean,
+    unlinkIssue: (args: Args) => void,
+};
+
+const useUnlinkIssue: UseUnlinkIssue = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext() as { context: TicketContext };
+    const { createAutomatedUnlinkedComment } = useAutomatedComment();
     const { removeDeskproLabel } = useDeskproLabel();
-    const ticketId = get(context, ["data", "ticket", "id"]);
-    const permalink = get(context, ["data", "ticket", "permalinkUrl"]);
-    const dontAddComment = get(context, ["settings", "dont_add_comment_when_linking_issue"]) === true;
 
-    const unlinkIssue = useCallback(({ issueIid, projectId }: UnlinkArgs): void => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const ticketId = get(context, ["data", "ticket", "id"]);
+
+    const unlinkIssue = useCallback(({ issueIid, projectId }: Args) => {
         if (!issueIid || !projectId || !client || !ticketId) {
             return;
         }
 
+        setIsLoading(true);
+
         deleteEntityIssueService(client, ticketId, getEntityId({ project_id: projectId, iid: issueIid }))
             .then(() => {
                 return Promise.all([
-                    dontAddComment
-                        ? Promise.resolve()
-                        : createIssueCommentService(client, projectId, issueIid, {
-                            body: getAutomatedUnlinkedComment(ticketId, permalink),
-                        }),
+                    createAutomatedUnlinkedComment(projectId, issueIid),
                     removeDeskproLabel(projectId, issueIid),
                     queryClient.refetchQueries([QueryKey.ISSUES, projectId, issueIid]),
                     queryClient.refetchQueries([QueryKey.PROJECTS, projectId]),
                 ])
             })
             .then(() => {
-                navigate("/home")
+                setIsLoading(false);
+                navigate("/home");
             });
-    }, [client, ticketId, permalink, dontAddComment, navigate, removeDeskproLabel]);
+    }, [client, ticketId, navigate, removeDeskproLabel, createAutomatedUnlinkedComment]);
 
-    return {
-        unlinkIssue,
-    };
+    return { unlinkIssue, isLoading };
 };
 
 export { useUnlinkIssue };

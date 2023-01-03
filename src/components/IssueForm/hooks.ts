@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import { useQueryWithClient } from "../../hooks";
 import {
     getProjectsService,
@@ -7,8 +8,9 @@ import {
 } from "../../services/gitlab";
 import { QueryKey } from "../../query";
 import { getOption } from "../../utils";
+import { Member } from "../common";
 import type { Maybe } from "../../types";
-import type { Project, Milestone, Member, Label } from "../../services/gitlab/types";
+import type { Project, Milestone, Member as MemberType, Label } from "../../services/gitlab/types";
 import type { Option } from "../../types";
 
 export type UseLoadIssueFormDeps = (params: {
@@ -17,7 +19,7 @@ export type UseLoadIssueFormDeps = (params: {
     isLoading: boolean,
     projectOptions: Array<Option<Project["id"]>>
     milestoneOptions: Array<Option<Milestone["id"]>>,
-    memberOptions: Array<Option<Member["id"]>>,
+    memberOptions: Array<Option<MemberType["id"]>>,
     labels: Label[],
 };
 
@@ -39,12 +41,18 @@ const useLoadIssueFormDeps: UseLoadIssueFormDeps = ({ projectId }) => {
         },
     );
 
-    const members = useQueryWithClient<Member[], unknown, Array<Option<Member["id"]>>>(
+    const members = useQueryWithClient<MemberType[], unknown, Array<Option<MemberType["id"]>>>(
         [QueryKey.PROJECTS, projectId, QueryKey.MEMBERS],
         (client) => getProjectMembersService(client, projectId as Project["id"]),
         {
             enabled: Boolean(projectId),
-            select: (data: Member[]) => (data || []).map(({ id, name }) => getOption(id, name)),
+            select: (data: MemberType[]) => (data || []).map(({ id, name, avatar_url }) => ({
+                value: id,
+                key: `${id}`,
+                type: "value",
+                description: name,
+                label: createElement(Member, { name, avatarUrl: avatar_url }),
+            })),
         },
     );
 

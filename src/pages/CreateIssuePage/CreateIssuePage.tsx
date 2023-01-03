@@ -10,9 +10,9 @@ import {
     useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { setEntityIssueService } from "../../services/entityAssociation";
-import { createIssueService, createIssueCommentService } from "../../services/gitlab";
-import { useSetTitle, useDeskproLabel } from "../../hooks";
-import { getEntityId, getAutomatedLinkedComment } from "../../utils";
+import { createIssueService } from "../../services/gitlab";
+import { useSetTitle, useDeskproLabel, useAutomatedComment } from "../../hooks";
+import { getEntityId, getEntityMetadata } from "../../utils";
 import { Container } from "../../components/common";
 import { IssueForm, getIssueValues } from "../../components/IssueForm";
 import type { FC } from "react";
@@ -22,11 +22,10 @@ const CreateIssuePage: FC = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
+    const { createAutomatedLinkedComment } = useAutomatedComment();
     const { addDeskproLabel } = useDeskproLabel();
 
     const ticketId = get(context, ["data", "ticket", "id"]);
-    const permalink = get(context, ["data", "ticket", "permalinkUrl"]);
-    const dontAddComment = get(context, ["settings", "dont_add_comment_when_linking_issue"]) === true;
 
     const onNavigateToLinkIssue = useCallback(() => navigate("/link"), [navigate]);
 
@@ -58,13 +57,14 @@ const CreateIssuePage: FC = () => {
 
         return createIssueService(client, projectId, getIssueValues(data))
             .then((issue) => Promise.all([
-                setEntityIssueService(client, ticketId, getEntityId(issue)),
+                setEntityIssueService(
+                    client,
+                    ticketId,
+                    getEntityId(issue),
+                    getEntityMetadata(issue, [data.project])
+                ),
                 addDeskproLabel(projectId, issue.iid),
-                dontAddComment
-                    ? Promise.resolve()
-                    : createIssueCommentService(client, projectId, issue.iid, {
-                        body: getAutomatedLinkedComment(ticketId, permalink)
-                    })
+                createAutomatedLinkedComment(projectId, issue.iid),
             ]))
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore ToDo: need to fix typings in @app-sdk
@@ -73,7 +73,7 @@ const CreateIssuePage: FC = () => {
                     navigate("/home")
                 }
             });
-    }, [client, ticketId, permalink, addDeskproLabel, dontAddComment, navigate]);
+    }, [client, ticketId, addDeskproLabel, navigate, createAutomatedLinkedComment]);
 
     return (
         <Container>

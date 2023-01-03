@@ -6,6 +6,7 @@ import { useSetTitle } from "../../hooks";
 import { createIssueCommentService } from "../../services/gitlab";
 import { getIssueCommentValues, IssueCommentForm } from "../../components";
 import type { FC } from "react";
+import type { FormInput } from "../../components/IssueCommentForm/types";
 
 const CreateIssueCommentPage: FC = () => {
     const [searchParams] = useSearchParams();
@@ -25,7 +26,7 @@ const CreateIssueCommentPage: FC = () => {
         });
     }, [navigate, issueIid, projectId]);
 
-    const onSubmit = useCallback((data) => {
+    const onSubmit = useCallback((data: FormInput) => {
         if (!client || !projectId || !issueIid) {
             return;
         }
