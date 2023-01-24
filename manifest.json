@@ -2,7 +2,7 @@
   "name": "@deskpro-apps/gitlab",
   "title": "GitLab",
   "description": "View your GitLab issues from Deskpro and link them to tickets you are working on.",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "scope": "agent",
   "isSingleInstall": false,
   "hasDevMode": true,
@@ -45,7 +45,7 @@
       "title": "GitLab Instance URL",
       "description": "Enter the URL of your GitLab instance, or https://gitlab.com",
       "type": "string",
-      "validationPattern": "^https?:",
+      "validationPattern": "^https?:\\/\\/.+\\w$",
       "isRequired": true,
       "isBackendOnly": false,
       "order": 30
