@@ -45,7 +45,7 @@
       "title": "GitLab Instance URL",
       "description": "Enter the URL of your GitLab instance, or https://gitlab.com",
       "type": "string",
-      "validationPattern": "^https?:\\/\\/.+\\w$",
+      "validationPattern": "^https?:\\/\\/.+\\..+\\w$",
       "isRequired": true,
       "isBackendOnly": false,
       "order": 30
