@@ -11,7 +11,6 @@ const searchIssuesService = (
         queryParams: {
             search: q,
             with_labels_details: "true",
-            scope: "all",
         }
     });
 };

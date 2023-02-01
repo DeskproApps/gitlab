@@ -6,7 +6,6 @@ const getProjectsService = (client: IDeskproClient) => {
     return baseRequest<Project[]>(client, {
         url: "/projects",
         queryParams: {
-            owned: `${true}`,
             membership: `${true}`,
         },
     });
