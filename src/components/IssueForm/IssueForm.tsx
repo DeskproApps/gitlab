@@ -81,12 +81,12 @@ const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }
                 />
             </Label>
 
-            <ProjectField
+            {!isEditMode && <ProjectField
                 value={project}
                 options={projectOptions}
                 error={has(errors, ["project", "value", "message"])}
                 onChange={(option) => setValue("project", option)}
-            />
+            />}
 
             <TypeField
                 value={type}
