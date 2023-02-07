@@ -110,7 +110,6 @@ const LinkPage: FC = () => {
                 )),
                 ...selectedIssues.map(({ project_id, iid }) => addDeskproLabel(project_id, iid)),
                 ...selectedIssues.map(({ project_id, iid }) => createAutomatedLinkedComment(project_id, iid)),
-                ...selectedIssues.map(({ project_id, iid }) => addDeskproLabel(project_id, iid))
             ])
             .then(() => {
                 setIsSubmitting(false);
