@@ -7,7 +7,7 @@ const getProjectMembersService = (
     projectId: Project["id"],
 ) => {
     return baseRequest<Member[]>(client, {
-        url: `/projects/${projectId}/members`,
+        url: `/projects/${projectId}/members/all`,
     });
 };
 
