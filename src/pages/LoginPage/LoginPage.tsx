@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import get from "lodash/get";
+import get from "lodash.get";
 import {
     H3,
     useDeskproElements,

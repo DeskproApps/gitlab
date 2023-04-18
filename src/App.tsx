@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import get from "lodash/get";
+import get from "lodash.get";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import { useQueryErrorResetBoundary } from "@tanstack/react-query";
