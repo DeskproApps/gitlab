@@ -1,6 +1,6 @@
 import * as yup from "yup";
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
+import get from "lodash.get";
+import isEmpty from "lodash.isempty";
 import { getOption, getIssueTypes } from "../../utils";
 import type { Label } from "../../services/gitlab/types";
 import type { FormInput, IssueValues, InitParams } from "./types";

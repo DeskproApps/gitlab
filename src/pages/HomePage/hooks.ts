@@ -1,6 +1,6 @@
 import { useState } from "react";
-import isEmpty from "lodash/isEmpty";
-import get from "lodash/get";
+import isEmpty from "lodash.isempty";
+import get from "lodash.get";
 import {
     useDeskproLatestAppContext,
     useInitialisedDeskproAppClient,

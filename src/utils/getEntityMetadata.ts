@@ -1,6 +1,6 @@
-import get from "lodash/get";
-import pick from "lodash/pick";
-import isEmpty from "lodash/isEmpty";
+import get from "lodash.get";
+import pick from "lodash.pick";
+import isEmpty from "lodash.isempty";
 import type { Issue, Project } from "../services/gitlab/types";
 import type { Option, EntityMetadata } from "../types";
 

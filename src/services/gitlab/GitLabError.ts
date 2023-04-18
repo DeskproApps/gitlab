@@ -1,4 +1,4 @@
-import isString from "lodash/isString";
+import isString from "lodash.isstring";
 import type { GitLabErrors, ErrorWithDescription, ErrorWithMessage } from "./types";
 
 const isErrorWithMessage = (error: GitLabErrors): error is ErrorWithMessage => {

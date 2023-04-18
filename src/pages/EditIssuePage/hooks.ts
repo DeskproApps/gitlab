@@ -1,5 +1,5 @@
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
+import get from "lodash.get";
+import isEmpty from "lodash.isempty";
 import { useQueryWithClient } from "../../hooks";
 import { getIssueService, getProjectService } from "../../services/gitlab";
 import { QueryKey } from "../../query";

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import get from "lodash/get";
+import get from "lodash.get";
 import { useDeskproAppClient, useDeskproLatestAppContext } from "@deskpro/app-sdk";
 import { deleteEntityIssueService } from "../services/entityAssociation";
 import { useDeskproLabel, useAutomatedComment } from "../hooks";

@@ -1,7 +1,7 @@
 import { FC, useState, MouseEvent } from "react";
 import styled from "styled-components";
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
+import get from "lodash.get";
+import isEmpty from "lodash.isempty";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Avatar } from "@deskpro/deskpro-ui";
 import {
