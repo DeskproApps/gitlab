@@ -2,10 +2,11 @@
   "name": "@deskpro-apps/gitlab",
   "title": "GitLab",
   "description": "View your GitLab issues from Deskpro and link them to tickets you are working on.",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "scope": "agent",
   "isSingleInstall": false,
   "hasDevMode": true,
+  "serveUrl": "https://apps-cdn.deskpro-service.com/__name__/__version__",
   "targets": [
     {
       "target": "ticket_sidebar",
