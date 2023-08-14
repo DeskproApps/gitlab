@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import get from "lodash/get";
+import get from "lodash.get";
 import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
     TwoButtonGroup,

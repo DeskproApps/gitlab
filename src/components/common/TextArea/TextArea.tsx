@@ -1,5 +1,5 @@
 import { forwardRef, Ref } from "react";
-import isNumber from "lodash/isNumber";
+import isNumber from "lodash.isnumber";
 import styled from "styled-components";
 import {
     TextAreaWithDisplay,

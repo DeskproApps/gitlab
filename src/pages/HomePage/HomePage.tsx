@@ -1,6 +1,6 @@
 import { FC, Fragment, useCallback } from "react";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import isEmpty from "lodash/isEmpty";
+import isEmpty from "lodash.isempty";
 import {
     P5,
     LoadingSpinner,

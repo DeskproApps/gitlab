@@ -2,23 +2,26 @@
   "name": "@deskpro-apps/gitlab",
   "title": "GitLab",
   "description": "View your GitLab issues from Deskpro and link them to tickets you are working on.",
-  "version": "1.0.11",
+  "version": "1.0.15",
   "scope": "agent",
   "isSingleInstall": false,
   "hasDevMode": true,
-  "targets": [{
-    "target": "ticket_sidebar",
-    "entrypoint": "index.html",
-    "options": {
-      "actions": {
-        "linkTicket": {
-          "type": "ticket_addition",
-          "title": "GitLab Issue",
-          "description": "Link ticket to a GitLab issue"
+  "serveUrl": "https://apps-cdn.deskpro-service.com/__name__/__version__",
+  "targets": [
+    {
+      "target": "ticket_sidebar",
+      "entrypoint": "index.html",
+      "options": {
+        "actions": {
+          "linkTicket": {
+            "type": "ticket_addition",
+            "title": "GitLab Issue",
+            "description": "Link ticket to a GitLab issue"
+          }
         }
       }
     }
-  }],
+  ],
   "entityAssociations": {
     "linkedGitlabIssue": {
       "title": "Linked GitLab Issue",
@@ -69,19 +72,19 @@
     "callback_url": {
       "title": "",
       "type": "app_embedded",
-      "options": {
-        "entrypoint": "#/admin/callback"
-      },
+      "options": { "entrypoint": "#/admin/callback" },
       "isRequired": false,
       "isBackendOnly": false,
       "order": 60
     }
   },
   "proxy": {
-    "whitelist": [{
-      "url": "__gitlab_instance_url__/.*",
-      "methods": ["GET", "POST", "PUT"],
-      "timeout": 10
-    }]
+    "whitelist": [
+      {
+        "url": "__gitlab_instance_url__/.*",
+        "methods": ["GET", "POST", "PUT"],
+        "timeout": 10
+      }
+    ]
   }
 }

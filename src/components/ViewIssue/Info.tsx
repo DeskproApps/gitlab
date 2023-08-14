@@ -1,5 +1,5 @@
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
+import get from "lodash.get";
+import isEmpty from "lodash.isempty";
 import { P5, Stack } from "@deskpro/app-sdk";
 import { format } from "../../utils/date";
 import { mdToHtml } from "../../utils";

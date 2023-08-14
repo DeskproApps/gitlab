@@ -1,5 +1,5 @@
 import { match } from "ts-pattern";
-import capitalize from "lodash/capitalize";
+import capitalize from "lodash.capitalize";
 import { Pill, useDeskproAppTheme } from "@deskpro/app-sdk";
 import type { FC } from "react";
 
