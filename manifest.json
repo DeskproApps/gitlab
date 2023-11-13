@@ -1,6 +1,7 @@
 {
   "name": "@deskpro-apps/gitlab",
   "title": "GitLab",
+  "appStoreUrl": "https://www.deskpro.com/product-embed/apps/gitlab",
   "description": "View your GitLab issues from Deskpro and link them to tickets you are working on.",
   "version": "1.0.16",
   "scope": "agent",
