@@ -14,7 +14,7 @@
     "bumpManifestVer": "node ./bin/bumpManifestVer.js"
   },
   "dependencies": {
-    "@adobe/css-tools": "4.3.2",
+    "@adobe/css-tools": "4.3.3",
     "@babel/traverse": "7.23.2",
     "@deskpro/app-sdk": "^1.2.2",
     "@deskpro/deskpro-ui": "4.1.0",
@@ -27,7 +27,7 @@
     "flatpickr": "^4.6.13",
     "iframe-resizer": "^4.3.2",
     "javascript-time-ago": "^2.5.9",
-    "json5": "2.2.2",
+    "json5": "2.2.3",
     "lodash": "^4.17.21",
     "polished": "^4.1.1",
     "react": "^17.0.2",
@@ -37,7 +37,7 @@
     "react-hook-form": "^7.40.0",
     "react-router-dom": "^6.4.3",
     "react-time-ago": "^7.2.1",
-    "semver": "7.5.3",
+    "semver": "7.5.4",
     "showdown": "^2.1.0",
     "simplebar": "^6.2.5",
     "styled-components": "^5.3.6",
@@ -46,7 +46,7 @@
     "ts-pattern": "^4.0.6",
     "use-debounce": "^9.0.4",
     "uuid": "^9.0.0",
-    "word-wrap": "1.2.4",
+    "word-wrap": "1.2.5",
     "yup": "^0.32.11"
   },
   "devDependencies": {
@@ -71,7 +71,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-react-hooks": "4.3.0",
     "jest": "^27.4.7",
-    "postcss": "8.4.31",
+    "postcss": "8.4.35",
     "prettier": "^2.8.7",
     "rimraf": "^3.0.2",
     "rollup-plugin-copy": "3.4.0",
