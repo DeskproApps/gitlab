@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import get from "lodash.get";
-import isEmpty from "lodash.isempty";
+import { get, isEmpty } from "lodash";
 import { useNavigate } from "react-router-dom";
 import {
     useDeskproLatestAppContext,

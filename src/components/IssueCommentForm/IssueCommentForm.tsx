@@ -1,4 +1,4 @@
-import has from "lodash.has";
+import { has } from "lodash";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Stack } from "@deskpro/app-sdk";

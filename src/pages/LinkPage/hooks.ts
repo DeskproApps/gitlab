@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import isEmpty from "lodash.isempty";
-import uniq from "lodash.uniq";
+import { uniq, isEmpty } from "lodash";
 import { useQueriesWithClient, useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { searchIssuesService, getProjectService } from "../../services/gitlab";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import get from "lodash.get";
+import { get } from "lodash";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
 import { Dropdown, DropdownTargetProps } from "@deskpro/app-sdk";

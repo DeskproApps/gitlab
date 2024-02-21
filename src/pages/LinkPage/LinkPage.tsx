@@ -1,8 +1,7 @@
 import { FC, ChangeEvent, useState, useCallback } from "react";
-import cloneDeep from "lodash.clonedeep";
+import { get, cloneDeep } from "lodash";
 import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import get from "lodash.get";
 import {
     TwoButtonGroup,
     useDeskproElements,
