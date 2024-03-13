@@ -1,8 +1,8 @@
 import { FC, Fragment, useCallback } from "react";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { isEmpty } from "lodash";
+import { P5 } from "@deskpro/deskpro-ui";
 import {
-    P5,
     LoadingSpinner,
     HorizontalDivider,
     useDeskproElements,

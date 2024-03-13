@@ -34,7 +34,7 @@ const LinkPage: FC = () => {
 
     const [search, setSearch] = useState<string>("");
     const [selectedIssues, setSelectedIssues] = useState<Issue[]>([]);
-    const [selectedProject, setSelectedProject] = useState<Option<Issue["project_id"]|"any">>(getOption("any", "Any"));
+    const [selectedProject, setSelectedProject] = useState<Option<Issue["project_id"]|"any">>(getOption<number|"any">("any", "Any"));
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const { isLoading, isFetching, issues, projectOptions } = useSearch(search);
@@ -138,7 +138,11 @@ const LinkPage: FC = () => {
                 onChangeSelect={onChangeSelect}
                 onChangeSelectedIssue={onChangeSelectedIssue}
                 selectedIssues={selectedIssues}
-                projectOptions={[getOption("any", "Any"), ...projectOptions.filter((o) => Boolean(o))]}
+                projectOptions={[
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    getOption("any", "Any") as any,
+                    ...projectOptions.filter((o) => Boolean(o))
+                ]}
                 issues={getFilteredIssues(issues, selectedProject)}
                 onLinkIssues={onLinkIssues}
                 onCancel={onCancel}

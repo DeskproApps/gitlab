@@ -1,5 +1,6 @@
 import type { ParamKeyValuePair } from "react-router-dom";
-import type { Context, IDeskproClient, DropdownValueType } from "@deskpro/app-sdk";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
+import type { Context, IDeskproClient } from "@deskpro/app-sdk";
 import type { Issue, Milestone, Project, Member, Label } from "./services/gitlab/types";
 
 export type Maybe<T> = T | undefined | null;

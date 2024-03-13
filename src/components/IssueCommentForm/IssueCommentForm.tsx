@@ -1,7 +1,7 @@
 import { has } from "lodash";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Stack } from "@deskpro/app-sdk";
+import { Stack } from "@deskpro/deskpro-ui";
 import { getInitValues, validationSchema } from "./utils";
 import { Label, Button, Container, TextArea } from "../common";
 import type { FC } from "react";

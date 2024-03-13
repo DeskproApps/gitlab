@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { get } from "lodash";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-import { DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
-import { Dropdown, DropdownTargetProps } from "@deskpro/app-sdk";
+import { DivAsInputWithDisplay, Dropdown, DropdownTargetProps } from "@deskpro/deskpro-ui";
 import { Label } from "../../common";
 import type { FC } from "react";
-import type { DropdownValueType } from "@deskpro/app-sdk";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
 import type { Option } from "../../../types";
 import type { Member } from "../../../services/gitlab/types";
 

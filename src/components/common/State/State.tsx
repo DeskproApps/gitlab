@@ -1,6 +1,7 @@
 import { match } from "ts-pattern";
 import { capitalize } from "lodash";
-import { Pill, useDeskproAppTheme } from "@deskpro/app-sdk";
+import { Pill } from "@deskpro/deskpro-ui";
+import { useDeskproAppTheme } from "@deskpro/app-sdk";
 import type { FC } from "react";
 
 type Props = { state?: "opened"|"closed"|"merged" };

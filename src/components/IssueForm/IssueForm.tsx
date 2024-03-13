@@ -1,8 +1,8 @@
 import { has } from "lodash";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { InputWithDisplay } from "@deskpro/deskpro-ui";
-import { Stack, LoadingSpinner } from "@deskpro/app-sdk";
+import { Stack, InputWithDisplay } from "@deskpro/deskpro-ui";
+import { LoadingSpinner } from "@deskpro/app-sdk";
 import {
     Label,
     Button,
@@ -28,7 +28,8 @@ const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }
         formState: { errors, isSubmitting },
         handleSubmit,
     } = useForm<FormInput>({
-        defaultValues: getInitValues(params),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        defaultValues: getInitValues(params) as any,
         resolver: yupResolver(validationSchema),
     });
     const [

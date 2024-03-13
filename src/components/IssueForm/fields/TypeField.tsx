@@ -1,6 +1,5 @@
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-import { DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
-import { Dropdown, DropdownTargetProps } from "@deskpro/app-sdk";
+import { DivAsInputWithDisplay, Dropdown, DropdownTargetProps } from "@deskpro/deskpro-ui";
 import { getIssueTypes } from "../../../utils";
 import { Label } from "../../common";
 import type { FC } from "react";
@@ -20,7 +19,7 @@ const TypeField: FC<{
             externalLinkIcon={faExternalLinkAlt}
             placement="bottom-start"
             hideIcons
-            options={Object.values(getIssueTypes())}
+            options={Object.values(getIssueTypes()) as Array<Option<IssueType>>}
             onSelectOption={onChange}
         >
             {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) => {

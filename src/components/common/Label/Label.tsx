@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 import styled from "styled-components";
-import { Label as UILabel } from "@deskpro/app-sdk";
+import { Label as UILabel } from "@deskpro/deskpro-ui";
 import type { FC, Ref } from "react";
-import type { LabelProps } from "@deskpro/app-sdk";
+import type { LabelProps } from "@deskpro/deskpro-ui";
 
 export type Props = LabelProps & {
     marginBottom?: number

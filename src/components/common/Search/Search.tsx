@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { faSearch, faTimes, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input, IconButton } from "@deskpro/app-sdk";
+import { Input, IconButton } from "@deskpro/deskpro-ui";
 import { Label } from "../Label";
-import type { InputProps } from "@deskpro/app-sdk";
+import type { InputProps } from "@deskpro/deskpro-ui";
 
 export type Props = {
     value: string,

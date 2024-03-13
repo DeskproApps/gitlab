@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Stack } from "@deskpro/app-sdk";
+import { Stack } from "@deskpro/deskpro-ui";
 
 type Props = {
     text: string | JSX.Element | Array<string | JSX.Element>,

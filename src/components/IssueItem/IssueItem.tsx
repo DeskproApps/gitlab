@@ -2,12 +2,8 @@ import { FC, useState, MouseEvent } from "react";
 import styled from "styled-components";
 import { get, isEmpty } from "lodash";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Avatar } from "@deskpro/deskpro-ui";
-import {
-    P5,
-    Stack,
-    useInitialisedDeskproAppClient,
-} from "@deskpro/app-sdk";
+import { P5, Stack, Avatar } from "@deskpro/deskpro-ui";
+import { useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import {
     State,
     Title,
@@ -46,7 +42,7 @@ const Assignees: FC<{ assignees?: Issue["assignees"] }> = ({ assignees }) => {
 
 const IssueItem: FC<{
     issue: Issue,
-    projects: Array<Option<string|Issue["project_id"]>>
+    projects: Array<Option<Issue["project_id"]>>
     onClickTitle?: () => void,
 }> = ({
     issue: {

@@ -6,14 +6,12 @@ import {
     faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+    Dropdown,
     LabelProps,
+    DropdownTargetProps,
     DivAsInputWithDisplay,
     DivAsInputWithDisplayProps,
 } from "@deskpro/deskpro-ui";
-import {
-    Dropdown,
-    DropdownTargetProps,
-} from "@deskpro/app-sdk";
 import { Label } from "../Label";
 import type { Option } from "../../../types";
 

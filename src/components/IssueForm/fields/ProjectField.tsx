@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-import { DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
-import { Dropdown, DropdownTargetProps } from "@deskpro/app-sdk";
+import { DivAsInputWithDisplay, Dropdown, DropdownTargetProps } from "@deskpro/deskpro-ui";
 import { Label } from "../../common";
 import type { FC } from "react";
 import type { Option } from "../../../types";

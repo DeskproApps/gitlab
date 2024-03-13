@@ -1,6 +1,10 @@
 import { faCheck, faExternalLinkAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Button as ButtonUI } from "@deskpro/deskpro-ui";
-import { Dropdown, DropdownTargetProps, Stack } from "@deskpro/app-sdk";
+import {
+    Stack,
+    Dropdown,
+    Button as ButtonUI,
+    DropdownTargetProps,
+} from "@deskpro/deskpro-ui";
 import { getOption } from "../../../utils";
 import { IssueLabel, Label } from "../../common";
 import type { FC } from "react";

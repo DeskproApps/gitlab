@@ -1,9 +1,6 @@
 import { FC, Fragment } from "react";
-import {
-    Stack,
-    Checkbox,
-    HorizontalDivider,
-} from "@deskpro/app-sdk";
+import { Stack, Checkbox } from "@deskpro/deskpro-ui";
+import { HorizontalDivider } from "@deskpro/app-sdk";
 import {
     Card,
     Button,
@@ -26,10 +23,10 @@ type Props = {
     isSubmitting: boolean,
     onChange: SearchProps["onChange"],
     onClear: SearchProps["onClear"],
-    selectedProject: Option<string|Issue["project_id"]>,
+    selectedProject: Option<"any"|Issue["project_id"]>,
     onChangeSelect: (o: Option<Issue["project_id"]|"any">) => void,
     selectedIssues: Issue[],
-    projectOptions: Array<Option<string|Issue["project_id"]>>,
+    projectOptions: Array<Option<Issue["project_id"]>>,
     onLinkIssues: () => void,
     onCancel: () => void,
     issues: Issue[],
@@ -64,8 +61,8 @@ const LinkIssue: FC<Props> = ({
             <SingleSelect onChange={onChangeSelect}
                 id="group"
                 label="Group"
-                value={selectedProject}
-                options={projectOptions as DropdownValueType<Issue["project_id"]>[]}
+                value={selectedProject as never}
+                options={projectOptions as DropdownValueType<unknown>[]}
                 showInternalSearch
             />
             <Stack justify="space-between" style={{ paddingBottom: "4px" }}>

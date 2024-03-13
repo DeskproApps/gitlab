@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import ReactTimeAgo from "react-time-ago";
 import { Avatar } from "@deskpro/deskpro-ui";
-import { P1, P11, Stack } from "@deskpro/app-sdk";
+import { P1, P11, Stack } from "@deskpro/deskpro-ui";
 import { mdToHtml } from "../../utils";
 import {
     Title,

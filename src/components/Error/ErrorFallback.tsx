@@ -3,7 +3,7 @@ import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { match } from "ts-pattern";
 import { useNavigate } from "react-router-dom";
 import { FallbackProps } from "react-error-boundary";
-import { Stack } from "@deskpro/app-sdk";
+import { Stack } from "@deskpro/deskpro-ui";
 import { GitLabError } from "../../services/gitlab";
 import { ErrorBlock } from "./ErrorBlock";
 import { Container, Button } from "../common";

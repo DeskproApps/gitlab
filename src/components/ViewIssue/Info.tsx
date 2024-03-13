@@ -1,5 +1,5 @@
 import { get, isEmpty } from "lodash";
-import { P5, Stack } from "@deskpro/app-sdk";
+import { P5, Stack } from "@deskpro/deskpro-ui";
 import { format } from "../../utils/date";
 import { mdToHtml } from "../../utils";
 import {

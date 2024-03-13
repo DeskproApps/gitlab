@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { get } from "lodash";
+import { H3 } from "@deskpro/deskpro-ui";
 import {
-    H3,
     useDeskproElements,
     useDeskproLatestAppContext,
     useInitialisedDeskproAppClient,

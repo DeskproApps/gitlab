@@ -1,6 +1,6 @@
 import { FC, ReactNode, isValidElement } from "react";
 import styled from "styled-components";
-import { P5, P8 } from "@deskpro/app-sdk";
+import { P5, P8 } from "@deskpro/deskpro-ui";
 import type { Props } from "./types";
 
 const Label = styled(P8)`
