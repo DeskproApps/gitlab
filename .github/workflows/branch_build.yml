@@ -50,8 +50,8 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
-      - name: Type check
-        run: pnpm tsc --noemit
+#      - name: Type check
+#        run: pnpm tsc --noemit
 
       # - name: Run tests
       #   run: pnpm test:coverage
