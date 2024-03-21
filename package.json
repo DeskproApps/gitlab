@@ -4,7 +4,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "start": "vite",
-    "build": "rimraf ./dist/* && tsc && vite build",
+    "build": "rimraf ./dist/* && vite build",
     "build:package": "pnpm build && pnpm package",
     "package": "rimraf ./build/* && node ./bin/package.js",
     "serve": "vite preview",
