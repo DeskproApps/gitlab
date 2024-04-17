@@ -3,7 +3,7 @@
   "title": "GitLab",
   "appStoreUrl": "https://www.deskpro.com/product-embed/apps/gitlab",
   "description": "View your GitLab issues from Deskpro and link them to tickets you are working on.",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "scope": "agent",
   "isSingleInstall": false,
   "hasDevMode": true,
