@@ -3,7 +3,7 @@ export { GitlabLink } from "./GitlabLink";
 export { Title } from "./Title";
 export { Label } from "./Label";
 export { Search } from "./Search";
-export { Container } from "./Layout";
+export { Container, AppContainer } from "./Layout";
 export { SingleSelect } from "./SingleSelect";
 export { Loading } from "./Loading";
 export { NoFound } from "./NoFound";
