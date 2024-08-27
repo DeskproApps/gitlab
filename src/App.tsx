@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import { get } from "lodash";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
@@ -35,7 +35,7 @@ const App = () => {
     const { client } = useDeskproAppClient();
     const { logout, isLoading: isLoadingLogout } = useLogout();
     const { unlinkIssue, isLoading: isLoadingUnlink } = useUnlinkIssue();
-    const isAdmin = useMemo(() => pathname.includes("/admin/"), [pathname]);
+    const isAdmin = pathname.includes("/admin/");
 
     const isLoading = [isLoadingUnlink, isLoadingLogout].some((isLoading) => isLoading);
 
