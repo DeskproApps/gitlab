@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { get } from "lodash";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import { useQueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
@@ -24,15 +24,18 @@ import {
     CreateIssueCommentPage,
 } from "./pages";
 import { ErrorFallback } from "./components";
+import { AppContainer } from "./components/common";
 import { useLogout, useUnlinkIssue } from "./hooks";
 import type { EventPayload } from "./types";
 
 const App = () => {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
     const { reset } = useQueryErrorResetBoundary();
     const { client } = useDeskproAppClient();
     const { logout, isLoading: isLoadingLogout } = useLogout();
     const { unlinkIssue, isLoading: isLoadingUnlink } = useUnlinkIssue();
+    const isAdmin = pathname.includes("/admin/");
 
     const isLoading = [isLoadingUnlink, isLoadingLogout].some((isLoading) => isLoading);
 
@@ -85,20 +88,21 @@ const App = () => {
 
     return (
         <Suspense fallback={<LoadingSpinner/>}>
-            <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
-                <Routes>
-                    <Route path="/admin/callback" element={<AdminPage/>} />
-                    <Route path="/login" element={<LoginPage/>} />
-                    <Route path="/home" element={<HomePage/>} />
-                    <Route path="/link" element={<LinkPage/>} />
-                    <Route path="/view-issue" element={<ViewIssuePage/>} />
-                    <Route path="/create-issue" element={<CreateIssuePage/>} />
-                    <Route path="/edit-issue" element={<EditIssuePage/>} />
-                    <Route path="/create-issue-comment" element={<CreateIssueCommentPage/>} />
-                    <Route index element={<Main/>} />
-                </Routes>
-            </ErrorBoundary>
-            <br/><br/><br/>
+            <AppContainer isAdmin={isAdmin}>
+                <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
+                    <Routes>
+                        <Route path="/admin/callback" element={<AdminPage/>} />
+                        <Route path="/login" element={<LoginPage/>} />
+                        <Route path="/home" element={<HomePage/>} />
+                        <Route path="/link" element={<LinkPage/>} />
+                        <Route path="/view-issue" element={<ViewIssuePage/>} />
+                        <Route path="/create-issue" element={<CreateIssuePage/>} />
+                        <Route path="/edit-issue" element={<EditIssuePage/>} />
+                        <Route path="/create-issue-comment" element={<CreateIssueCommentPage/>} />
+                        <Route index element={<Main/>} />
+                    </Routes>
+                </ErrorBoundary>
+            </AppContainer>
         </Suspense>
     );
 };
