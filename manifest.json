@@ -31,18 +31,27 @@
     }
   },
   "settings": {
+    "use_deskpro_saas": {
+      "title": "Use Deskpro SaaS",
+      "type": "boolean",
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 5
+    },
     "app_id": {
       "title": "Application ID",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": false,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 10
     },
     "client_secret": {
       "title": "Secret",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": true,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 20
     },
     "gitlab_instance_url": {
@@ -50,8 +59,9 @@
       "description": "Enter the URL of your GitLab instance, or https://gitlab.com",
       "type": "string",
       "validationPattern": "^https?:\\/\\/.+\\..+\\w$",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": false,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 30
     },
     "callback_url": {
@@ -60,6 +70,7 @@
       "options": { "entrypoint": "#/admin/callback" },
       "isRequired": false,
       "isBackendOnly": false,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 40
     },
     "dont_add_comment_when_linking_issue": {

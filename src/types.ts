@@ -19,6 +19,7 @@ export type Settings = {
     gitlab_instance_url: Maybe<string>,
     dont_add_comment_when_linking_issue: boolean,
     dont_add_deskpro_label: boolean,
+    use_deskpro_saas: boolean
 };
 
 export type TicketData = {
