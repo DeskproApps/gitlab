@@ -60,7 +60,7 @@ const useLogin: UseLogin = () => {
                     };
                 }
             )
-            : await client.startOauth2Global('pending');
+            : await client.startOauth2Global('ca0ab63635d436b67910d10bab604c76de27fd8ef05e4bf78abb27caac282f0e');
 
         setAuthLink(oauth2.authorizationUrl);
         setError(null);

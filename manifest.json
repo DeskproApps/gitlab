@@ -8,6 +8,7 @@
   "isSingleInstall": false,
   "hasDevMode": true,
   "serveUrl": "https://apps-cdn.deskpro-service.com/__name__/__version__",
+  "secrets": "Rma9AxFO1bcEGzTkLKyxCLSZZ38BHyeTlT/zitShOoTg/BAZ9ddOHsk5UajqgCQEQhBOCWZVu2PKh/F3v04ajstPqO2gVeYbXxs3jwWWBLDTJXEYZ3/c45mgAbjbYP64MQMgALWkHYjCdogTpzhEtABLGCSjw4+YZoSb149+DPwNwjrcW8kxAwrC4VaBVrECQNnjU3mqWD6H0yQfuzC9e3oRjkvBT0VJwB7TKeB7uF4vyv8HMPHA3/ple27zdCqS2VuYuBG/X9GQDTHm0VcVjtLiO7G0sfbkr94au1zBQxYYEVa+2bAXeHNpVPk70DEYsE76kM7iE77ssa6p+craWeUrfgvrhTxO6KchZCdQbQgicXWLMzYXOLFTC1zpJrH2JcXFAw9scvz/kRAW6Hbw/uR8AsI0hP4ovqoz/HSIN7nfLLsza92xYSYXqFhZBvApqHWi8MDO+4cyb4Mq1SulcIlVxK4dCWLUnPvtT2lIy7s+tAeaalFmI6kefLBEvCvacFRaU8BvxCpy92uAdkt+B5AS1wPMoSFYA/diGxJicWzrlwpU7gQ8KOyX/a1h63Et0MzACF1jD/KAEGI9Yq9UIAczjHTMP5HTaykW9vjmgiBztgwZY9MFOMhSvny/2QpPTbuM7PUQFYnUSqI4wBbiHedlrSnKysX/CdfkdvkV12o=",
   "targets": [
     {
       "target": "ticket_sidebar",
@@ -59,9 +60,8 @@
       "description": "Enter the URL of your GitLab instance, or https://gitlab.com",
       "type": "string",
       "validationPattern": "^https?:\\/\\/.+\\..+\\w$",
-      "isRequired": false,
+      "isRequired": true,
       "isBackendOnly": false,
-      "condition": "settings.use_deskpro_saas != true",
       "order": 30
     },
     "callback_url": {
