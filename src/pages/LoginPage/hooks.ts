@@ -54,9 +54,7 @@ const useLogin: UseLogin = () => {
                     const { access_token } = await getAccessTokenService(client, code, callbackURLRef.current);
 
                     return {
-                        data: {
-                            access_token: access_token
-                        }
+                        data: { access_token }
                     };
                 }
             )
