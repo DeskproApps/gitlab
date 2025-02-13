@@ -1,14 +1,16 @@
-import { FC, useState, useMemo } from "react";
+import { FC, useState } from 'react';
+import { createSearchParams } from 'react-router-dom';
 import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { faCopy, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { P1, H2, Input, IconButton } from "@deskpro/deskpro-ui";
 import {
     LoadingSpinner,
     useDeskproAppTheme,
+    useDeskproLatestAppContext,
     useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { Settings } from '../types';
 
 const Label = styled(H2)`
     margin-bottom: 5px;
@@ -21,21 +23,40 @@ const Description = styled(P1)`
 `;
 
 const AdminPage: FC = () => {
+    const { context } = useDeskproLatestAppContext<unknown, Settings>();
     const { theme } = useDeskproAppTheme();
     const [callbackUrl, setCallbackUrl] = useState<string|null>(null);
     const [isCopy, setIsCopy] = useState<boolean>(false);
-    const key = useMemo(() => uuidv4(), []);
 
     const onClickCopy = () => {
         setIsCopy(true);
         setTimeout(() => setIsCopy(false), 2000);
     };
 
-    useInitialisedDeskproAppClient((client) => {
-        client.oauth2()
-            .getAdminGenericCallbackUrl(key, /code=(?<token>[0-9a-f]+)/, /state=(?<key>.+)/)
-            .then(({ callbackUrl }) => setCallbackUrl(callbackUrl));
-    }, [key]);
+    useInitialisedDeskproAppClient(client => {
+        const appID = context?.settings.app_id;
+        const gitlabInstanceURL = context?.settings.gitlab_instance_url;
+
+        client.startOauth2Local(
+            ({ callbackUrl, state }) => {
+                setCallbackUrl(callbackUrl);
+
+                return `${gitlabInstanceURL}/oauth/authorize?${createSearchParams([
+                    ['client_id', appID ?? ''],
+                    ['redirect_uri', callbackUrl],
+                    ['response_type', 'code'],
+                    ['state', state],
+                    ['scope', ['api'].join(' ')]
+                ])}`;
+            },
+            /code=(?<code>[0-9a-f]+)/,
+            async () => ({data: {access_token: ''}}),
+            {
+                pollInterval: 10000,
+                timeout: 600
+            }
+        );
+    }, []);
 
     if (!callbackUrl) {
         return (<LoadingSpinner/>);

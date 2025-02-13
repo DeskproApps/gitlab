@@ -3,7 +3,7 @@ import type { Maybe, DateTime, Dict } from "../../types";
 export type OAuthToken = {
     token_type: "Bearer",
     scope: string,
-    access_token: number,
+    access_token: string,
     refresh_token: string,
     created_at: number,
     expires_in: number,

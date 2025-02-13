@@ -1,18 +1,15 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useCallback, useRef } from 'react';
 import { createSearchParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import { get } from "lodash";
 import {
-    useDeskproAppClient,
-    OAuth2StaticCallbackUrl,
     useDeskproLatestAppContext,
+    useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import {
     placeholders,
     getAccessTokenService,
     getCurrentUserService,
 } from "../../services/gitlab";
-import { Maybe, TicketContext } from "../../types";
+import { Maybe, Settings } from '../../types';
 
 type UseLogin = () => {
     isAuth: boolean,
@@ -23,71 +20,75 @@ type UseLogin = () => {
 };
 
 const useLogin: UseLogin = () => {
-    const key = useMemo(() => uuidv4(), []);
-    const { client } = useDeskproAppClient();
-    const { context } = useDeskproLatestAppContext() as { context: TicketContext };
-
+    const { context } = useDeskproLatestAppContext<unknown, Settings>();
+    const callbackURLRef = useRef('');
     const [isAuth, setIsAuth] = useState<boolean>(false);
     const [authLink, setAuthLink] = useState<string>("");
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [callback, setCallback] = useState<OAuth2StaticCallbackUrl|undefined>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<Maybe<Error>>(null);
 
-    const appId = get(context, ["settings", "app_id"]);
-    const gitlabInstanceUrl = get(context, ["settings", "gitlab_instance_url"]);
-    const callbackUrl = get(callback, ["callbackUrl"]);
+    useInitialisedDeskproAppClient(async client => {
+        if (context?.settings.use_deskpro_saas === undefined) return;
+
+        const appID = context.settings.app_id;
+        const gitlabInstanceURL = context.settings.gitlab_instance_url;
+        const mode = context?.settings.use_deskpro_saas ? 'global' : 'local';
+
+        if (mode === 'local' && typeof appID !== 'string') return;
+
+        const oauth2 = mode === 'local'
+            ? await client.startOauth2Local(
+                ({ callbackUrl, state }) => {
+                    callbackURLRef.current = callbackUrl;
+
+                    return `${gitlabInstanceURL}/oauth/authorize?${createSearchParams([
+                        ['client_id', appID],
+                        ['redirect_uri', callbackUrl],
+                        ['response_type', 'code'],
+                        ['state', state],
+                        ['scope', ['api'].join(' ')]
+                    ])}`
+                },
+                /code=(?<code>[0-9a-f]+)/,
+                async code => {
+                    const { access_token } = await getAccessTokenService(client, code, callbackURLRef.current);
+
+                    return {
+                        data: {
+                            access_token: access_token
+                        }
+                    };
+                }
+            )
+            : await client.startOauth2Global('pending');
+
+        setAuthLink(oauth2.authorizationUrl);
+        setError(null);
+
+        try {
+            const pollResult = await oauth2.poll();
+            const { isSuccess, errors } = await client.setUserState(placeholders.TOKEN_PATH, pollResult.data.access_token, {backend: true});
+
+            isSuccess ? Promise.resolve() : Promise.reject(errors);
+
+            const user = await getCurrentUserService(client);
+
+            if (user.id) {
+                setIsAuth(true);
+            } else {
+                setError(new Error("Can't Find Current User"));
+            };
+        } catch (error) {
+            setError(error instanceof Error ? error : new Error('Unknown Error'));
+        } finally {
+            setIsLoading(false);
+        };
+    }, [setAuthLink, context?.settings.use_deskpro_saas, context?.settings.app_id]);
 
     const onSignIn = useCallback(() => {
-        if (!client || !callback?.poll || !callback.callbackUrl) {
-            return;
-        }
-
-        setError(null);
-        setTimeout(() => setIsLoading(true), 1000);
-        callback.poll()
-            .then(({ token }) => getAccessTokenService(client, token, callback.callbackUrl))
-            .then(({ access_token }) => client.setUserState(placeholders.TOKEN_PATH, access_token, { backend: true }))
-            .then(({ isSuccess, errors }) => isSuccess ? Promise.resolve() : Promise.reject(errors))
-            .then(() => getCurrentUserService(client))
-            .then((user) => {
-                if (get(user, ["id"], null)) {
-                    setIsAuth(true);
-                } else {
-                    setError(new Error("Can't find current user"));
-                    setIsLoading(false)
-                }
-            })
-            .catch((err) => {
-                setIsLoading(false);
-                setError(err);
-            });
-    }, [callback, client, setIsLoading]);
-
-    /** set callback */
-    useEffect(() => {
-        if (!callback && client) {
-            client.oauth2()
-                .getGenericCallbackUrl(key, /code=(?<token>[0-9a-f]+)/, /state=(?<key>.+)/)
-                .then(setCallback);
-        }
-    }, [client, key, callback]);
-
-    /** set authLink */
-    useEffect(() => {
-        if (appId && gitlabInstanceUrl && callbackUrl && key) {
-            setAuthLink(`${gitlabInstanceUrl}/oauth/authorize?${createSearchParams([
-                ["client_id", appId],
-                ["redirect_uri", callbackUrl],
-                ["response_type", "code"],
-                ["state", key],
-                ["scope", ["api"].join(" ")],
-            ])}`);
-            setIsLoading(false);
-        } else {
-            setAuthLink("");
-            setIsLoading(true);
-        }
-    }, [callbackUrl, key, appId, gitlabInstanceUrl]);
+        setIsLoading(true);
+        window.open(authLink, '_blank');
+    }, [setIsLoading, authLink]);
 
     return { isAuth, error, authLink, onSignIn, isLoading };
 };
