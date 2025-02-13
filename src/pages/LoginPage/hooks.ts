@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { createSearchParams } from "react-router-dom";
 import {
     useDeskproLatestAppContext,
-    useInitialisedDeskproAppClient,
+    useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
 import {
     placeholders,
