@@ -36,29 +36,27 @@ const useLogin: UseLogin = () => {
 
         if (mode === 'local' && typeof appID !== 'string') return;
 
-        const oauth2 = mode === 'local'
-            ? await client.startOauth2Local(
-                ({ callbackUrl, state }) => {
-                    callbackURLRef.current = callbackUrl;
+        const oauth2 = mode === 'global' ? await client.startOauth2Global('ca0ab63635d436b67910d10bab604c76de27fd8ef05e4bf78abb27caac282f0e') : await client.startOauth2Local(
+            ({ callbackUrl, state }) => {
+                callbackURLRef.current = callbackUrl;
 
-                    return `${gitlabInstanceURL}/oauth/authorize?${createSearchParams([
-                        ['client_id', appID],
-                        ['redirect_uri', callbackUrl],
-                        ['response_type', 'code'],
-                        ['state', state],
-                        ['scope', ['api'].join(' ')]
-                    ])}`
-                },
-                /code=(?<code>[0-9a-f]+)/,
-                async code => {
-                    const { access_token } = await getAccessTokenService(client, code, callbackURLRef.current);
+                return `${gitlabInstanceURL}/oauth/authorize?${createSearchParams([
+                    ['client_id', appID],
+                    ['redirect_uri', callbackUrl],
+                    ['response_type', 'code'],
+                    ['state', state],
+                    ['scope', ['api'].join(' ')]
+                ])}`;
+            },
+            /code=(?<code>[0-9a-f]+)/,
+            async code => {
+                const { access_token } = await getAccessTokenService(client, code, callbackURLRef.current);
 
-                    return {
-                        data: { access_token }
-                    };
-                }
-            )
-            : await client.startOauth2Global('ca0ab63635d436b67910d10bab604c76de27fd8ef05e4bf78abb27caac282f0e');
+                return {
+                    data: { access_token }
+                };
+            }
+        );
 
         setAuthLink(oauth2.authorizationUrl);
         setError(null);
