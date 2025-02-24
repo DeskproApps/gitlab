@@ -28,13 +28,17 @@ const useLogin: UseLogin = () => {
     const [error, setError] = useState<Maybe<Error>>(null);
 
     useInitialisedDeskproAppClient(async client => {
-        if (context?.settings.use_deskpro_saas === undefined) return;
+        if (context?.settings.use_deskpro_saas === undefined) {
+            return;
+        };
 
         const appID = context.settings.app_id;
         const gitlabInstanceURL = context.settings.gitlab_instance_url;
         const mode = context?.settings.use_deskpro_saas ? 'global' : 'local';
 
-        if (mode === 'local' && typeof appID !== 'string') return;
+        if (mode === 'local' && typeof appID !== 'string') {
+            return;
+        };
 
         const oauth2 = mode === 'global' ? await client.startOauth2Global('ca0ab63635d436b67910d10bab604c76de27fd8ef05e4bf78abb27caac282f0e') : await client.startOauth2Local(
             ({ callbackUrl, state }) => {
