@@ -70,7 +70,7 @@ const useLogin: UseLogin = () => {
             const { isSuccess, errors } = await client.setUserState(placeholders.TOKEN_PATH, pollResult.data.access_token, {backend: true});
 
             if (!isSuccess) {
-                throw new Error(errors);
+                throw new Error(errors.join(', '));
             };
 
             const user = await getCurrentUserService(client);
