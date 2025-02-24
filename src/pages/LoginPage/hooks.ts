@@ -69,7 +69,9 @@ const useLogin: UseLogin = () => {
             const pollResult = await oauth2.poll();
             const { isSuccess, errors } = await client.setUserState(placeholders.TOKEN_PATH, pollResult.data.access_token, {backend: true});
 
-            isSuccess ? Promise.resolve() : Promise.reject(errors);
+            if (!isSuccess) {
+                throw new Error(errors);
+            };
 
             const user = await getCurrentUserService(client);
 
