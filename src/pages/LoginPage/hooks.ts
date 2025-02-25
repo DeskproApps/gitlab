@@ -10,6 +10,7 @@ import {
     getCurrentUserService,
 } from "../../services/gitlab";
 import { Maybe, Settings } from '../../types';
+import { GLOBAL_CLIENT_ID } from '../../constants';
 
 type UseLogin = () => {
     isAuth: boolean,
@@ -40,7 +41,7 @@ const useLogin: UseLogin = () => {
             return;
         };
 
-        const oauth2 = mode === 'global' ? await client.startOauth2Global('ca0ab63635d436b67910d10bab604c76de27fd8ef05e4bf78abb27caac282f0e') : await client.startOauth2Local(
+        const oauth2 = mode === 'global' ? await client.startOauth2Global(GLOBAL_CLIENT_ID) : await client.startOauth2Local(
             ({ callbackUrl, state }) => {
                 callbackURLRef.current = callbackUrl;
 
