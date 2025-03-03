@@ -63,6 +63,8 @@
       "validationPattern": "^https?:\\/\\/.+\\..+\\w$",
       "isRequired": true,
       "isBackendOnly": false,
+      "default": "https://gitlab.com",
+      "condition": "settings.use_deskpro_saas != true",
       "order": 30
     },
     "callback_url": {
