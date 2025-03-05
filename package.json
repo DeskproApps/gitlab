@@ -35,7 +35,7 @@
     "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.54.2",
     "react-resize-observer": "^1.1.1",
-    "react-router-dom": "^6.28.1",
+    "react-router-dom": "^6.30.0",
     "react-time-ago": "^7.3.3",
     "semver": "7.5.3",
     "showdown": "^2.1.0",
