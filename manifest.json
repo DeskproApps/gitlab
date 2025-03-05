@@ -8,6 +8,7 @@
   "isSingleInstall": false,
   "hasDevMode": true,
   "serveUrl": "https://apps-cdn.deskpro-service.com/__name__/__version__",
+  "secrets": "3dLjyrKnEZprS35VNqjMObjHJ9N+Eq9QrkRx+bIFPazMcsveITS6rQgJ32WvKzRv3xOJY4o2PcsT5aYA0dpkjZDbCbMXBgwnL9rsZLf+xbgEqz6XClv/hi0dqrg3jMrBb2P0q4UEaS9LEhyVxf/w4i9LrsfV1EI7VedN3mez0APMSRbNk6hdSpNoUSTSXCBwFfm52EgSt2K8h81ei1VO9sgqCraeybdpS4g97XVT7k1KmU2nG6nQbYiQTFAnStItbaBz1aXIwwMMCMIqpmDZiLWUq34VXLKIx6v4e6u7KXCXEDq54njDRXQBqW/3KYKmXxv7Z6Q6hDl7ty5l/cird7SC7XxKHqw9zZ4/C6P0K98SJ3fevlTPfe+4FtGzb/vT92lD4KNazQDzCyFtWBPFwl6dENc8ijJVem4a7sWWLV0LVUzSzaLVctRhkycTI3TCLp9Rbvnuk8MBbnkVn5ISurzzCxwA10YPNEH7WzMbfyc71Q7Qpz2f5GnTE4T8OdSEKqwvYaxP1rdVSwV/6mShKY2lHxy8rZf5XPDtseM0eDNCLZGa6xFLpn/njKYm+0MfPimATKD1t/2gQf1zi15ZV6VO/AGKq+8qgn02sCvKM5psmqOD5JnBmJ7wTMxcW92dLBpXB9qsBYeJYBlKlYVgm+Yh5QViWV3r4QGQlw5QWL4PKeqRocoINVUW0UDSMRPaWDuu4qfHfSaXK/qyKjzv2zD+ummq2KdqyiLAYJVy0dde2YkZh+pGsxeO64YZZdG4ETHz/KgI4TpBhvEwrMjiSBqLMGMRUqJSIyGvHDq2+Lq2IRdXxDSollPJ0omcXwlo8IWAg6k+6/R1iL02b5yRSnnxSsRRz7KZNKafZx1Pb8cT/GU0kg1XFZIJ39PdJILnr9iHr5pyJKmGOeBtiaBxW3/oBVc7gYm5iKRgvnBN5Y3DrQZ/gbtZnyibtJgl+H49NLg6m7x2iz3S92MF2MQNVV9EF8Pl+tNhSEAkRzPmZo6aXmsQLjIdCyto0tzHzkqUdHdNNH97ljmbCmHj2+sq1OrfvchGznwPMLL2FX0QsMtDH7FnMof1JhbuErwFxA7JmQAVe0pP8e0TQ9AEPkHopoR8nxVc9W6odwNSxCkpk5MbRzqJwcmXdZAt3ogtglBoL2rueE2qRJMe4sJDceIOb9YY5LUCSAO4uE9RNHDM7GA=",
   "targets": [
     {
       "target": "ticket_sidebar",
@@ -31,18 +32,28 @@
     }
   },
   "settings": {
+    "use_deskpro_saas": {
+      "title": "One-Click Installation",
+      "type": "boolean",
+      "isRequired": false,
+      "isBackendOnly": false,
+      "default": true,
+      "order": 5
+    },
     "app_id": {
       "title": "Application ID",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": false,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 10
     },
     "client_secret": {
       "title": "Secret",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": true,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 20
     },
     "gitlab_instance_url": {
@@ -52,6 +63,8 @@
       "validationPattern": "^https?:\\/\\/.+\\..+\\w$",
       "isRequired": true,
       "isBackendOnly": false,
+      "default": "https://gitlab.com",
+      "condition": "settings.use_deskpro_saas != true",
       "order": 30
     },
     "callback_url": {
@@ -60,6 +73,7 @@
       "options": { "entrypoint": "#/admin/callback" },
       "isRequired": false,
       "isBackendOnly": false,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 40
     },
     "dont_add_comment_when_linking_issue": {
