@@ -37,7 +37,7 @@
     "react-resize-observer": "^1.1.1",
     "react-router-dom": "^6.28.1",
     "react-time-ago": "^7.3.3",
-    "semver": "7.5.3",
+    "semver": "7.7.1",
     "showdown": "^2.1.0",
     "simplebar": "^6.3.0",
     "styled-components": "^6.1.14",
