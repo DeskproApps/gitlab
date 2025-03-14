@@ -95,6 +95,7 @@ const useLogin: UseLogin = () => {
             } catch (error) {
                 setError(error instanceof Error ? error : new Error('Unknown Error'));
             } finally {
+                setIsPolling(false);
                 setIsLoading(false);
             };
         };
