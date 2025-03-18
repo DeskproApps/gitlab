@@ -32,13 +32,13 @@ const useLogin: UseLogin = () => {
     const [oAuth2Context, setOAuth2Context] = useState<IOAuth2 | null>(null);
 
     useInitialisedDeskproAppClient(async client => {
-        if (context?.settings.use_deskpro_saas === undefined) {
+        if (!context?.settings) {
             return;
         };
 
         const appID = context.settings.app_id;
         const gitlabInstanceURL = context.settings.gitlab_instance_url;
-        const mode = context?.settings.use_deskpro_saas ? 'global' : 'local';
+        const mode = context?.settings.use_advanced_connect ? 'local' : 'global';
 
         if (mode === 'local' && typeof appID !== 'string') {
             return;
@@ -69,7 +69,7 @@ const useLogin: UseLogin = () => {
         setAuthLink(oauth2Response.authorizationUrl);
         setOAuth2Context(oauth2Response);
         setError(null);
-    }, [setAuthLink, context?.settings.use_deskpro_saas, context?.settings.app_id]);
+    }, [setAuthLink, context?.settings.use_advanced_connect, context?.settings.app_id]);
 
     useInitialisedDeskproAppClient(client => {
         if (!oAuth2Context) {

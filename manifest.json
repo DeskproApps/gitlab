@@ -32,12 +32,13 @@
     }
   },
   "settings": {
-    "use_deskpro_saas": {
-      "title": "One-Click Installation",
+    "use_advanced_connect": {
+      "title": "Advanced Connect",
+      "description": "Follow the setup guide and use your credentials to connect the app to Deskpro",
       "type": "boolean",
       "isRequired": false,
       "isBackendOnly": false,
-      "default": true,
+      "default": false,
       "order": 5
     },
     "app_id": {
@@ -45,7 +46,7 @@
       "type": "string",
       "isRequired": false,
       "isBackendOnly": false,
-      "condition": "settings.use_deskpro_saas != true",
+      "condition": "settings.use_advanced_connect != false",
       "order": 10
     },
     "client_secret": {
@@ -53,7 +54,7 @@
       "type": "string",
       "isRequired": false,
       "isBackendOnly": true,
-      "condition": "settings.use_deskpro_saas != true",
+      "condition": "settings.use_advanced_connect != false",
       "order": 20
     },
     "gitlab_instance_url": {
@@ -64,16 +65,19 @@
       "isRequired": true,
       "isBackendOnly": false,
       "default": "https://gitlab.com",
-      "condition": "settings.use_deskpro_saas != true",
+      "condition": "settings.use_advanced_connect != false",
       "order": 30
     },
     "callback_url": {
       "title": "",
       "type": "app_embedded",
-      "options": { "entrypoint": "#/admin/callback" },
+      "options": {
+        "entrypoint": "#/admin/callback",
+        "height": "100px"
+      },
       "isRequired": false,
       "isBackendOnly": false,
-      "condition": "settings.use_deskpro_saas != true",
+      "condition": "settings.use_advanced_connect != false",
       "order": 40
     },
     "dont_add_comment_when_linking_issue": {

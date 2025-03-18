@@ -15,7 +15,7 @@ export type DateTime = string;
 export type Option<Value = unknown> = Omit<DropdownValueType<Value>, "subItems">;
 
 export type Settings = {
-    use_deskpro_saas: boolean,
+    use_advanced_connect: boolean,
     app_id: string,
     gitlab_instance_url: Maybe<string>,
     dont_add_comment_when_linking_issue: boolean,
