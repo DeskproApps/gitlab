@@ -40,7 +40,7 @@
     "semver": "^7.7.1",
     "showdown": "^2.1.0",
     "simplebar": "^6.3.0",
-    "styled-components": "^6.1.17",
+    "styled-components": "^6.1.15",
     "tippy.js": "^6.3.7",
     "tough-cookie": "^4.1.4",
     "ts-pattern": "^4.3.0",
