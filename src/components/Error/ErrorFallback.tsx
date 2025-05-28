@@ -6,7 +6,6 @@ import { Stack } from "@deskpro/deskpro-ui";
 import { GitLabError } from "../../services/gitlab";
 import { ErrorBlock } from "./ErrorBlock";
 import { Container, Button } from "../common";
-import type { FC } from "react";
 import { FallbackRender } from "@sentry/react";
 
 const ErrorFallback: FallbackRender = ({ resetError, error }) => {
