@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react';
 import './instrument';
 import React from "react";
 import ReactDOM from "react-dom";
@@ -21,15 +20,15 @@ import "./main.css"
 TimeAgo.addDefaultLocale(en);
 
 ReactDOM.render((
-    <React.StrictMode>
-        <Scrollbar style={{ height: "100%", width: "100%" }}>
-            <DeskproAppProvider>
-                <HashRouter>
-                    <QueryClientProvider client={queryClient}>
-                        <App />
-                    </QueryClientProvider>
-                </HashRouter>
-            </DeskproAppProvider>
-        </Scrollbar>
-    </React.StrictMode>
+  <React.StrictMode>
+    <Scrollbar style={{ height: "100%", width: "100%" }}>
+      <DeskproAppProvider>
+        <HashRouter>
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
+        </HashRouter>
+      </DeskproAppProvider>
+    </Scrollbar>
+  </React.StrictMode>
 ), document.getElementById("root"));
