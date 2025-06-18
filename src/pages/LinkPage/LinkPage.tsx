@@ -7,6 +7,7 @@ import {
     useDeskproElements,
     useDeskproAppClient,
     useDeskproLatestAppContext,
+    TwoButtonGroupProps,
 } from "@deskpro/app-sdk";
 import { LinkIssue } from "../../components";
 import { Container } from "../../components/common";
@@ -121,9 +122,9 @@ const LinkPage: FC = () => {
             <TwoButtonGroup
                 selected="one"
                 oneLabel="Find Issue"
-                oneIcon={faSearch}
+                oneIcon={faSearch as TwoButtonGroupProps["oneIcon"]}
                 twoLabel="Create Issue"
-                twoIcon={faPlus}
+                twoIcon={faPlus as TwoButtonGroupProps["twoIcon"]}
                 oneOnClick={() => {}}
                 twoOnClick={onNavigateToCreateIssue}
             />

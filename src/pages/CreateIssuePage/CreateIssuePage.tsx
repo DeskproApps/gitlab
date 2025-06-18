@@ -8,6 +8,7 @@ import {
     useDeskproElements,
     useDeskproAppClient,
     useDeskproLatestAppContext,
+    TwoButtonGroupProps,
 } from "@deskpro/app-sdk";
 import { setEntityIssueService } from "../../services/entityAssociation";
 import { createIssueService } from "../../services/gitlab";
@@ -80,9 +81,9 @@ const CreateIssuePage: FC = () => {
             <TwoButtonGroup
                 selected="two"
                 oneLabel="Find Issue"
-                oneIcon={faSearch}
+                oneIcon={faSearch as TwoButtonGroupProps["oneIcon"]}
                 twoLabel="Create Issue"
-                twoIcon={faPlus}
+                twoIcon={faPlus as TwoButtonGroupProps["twoIcon"]}
                 oneOnClick={onNavigateToLinkIssue}
                 twoOnClick={() => {}}
             />

@@ -38,10 +38,12 @@ const getInitValues = (params: InitParams = {}): FormInput => {
     const labels = (get(params, ["issue", "labels"]) || []).map(({ name }: Label) => name);
     const assigneeId = get(params, ["issue", "assignee", "id"]);
 
+    const issueTypeKey = params?.issue?.issue_type;
+    // issueTypes?.[issueTypeKey?? "issue"] ?? getOption("issue", "Issue")
     return {
         title: get(params, ["issue", "title"], ""),
         description: get(params, ["issue", "description"], ""),
-        type: get(issueTypes, [get(params, ["issue", "issue_type"])], getOption("issue", "Issue")),
+        type: issueTypes?.[issueTypeKey?? "issue"] ?? getOption("issue", "Issue"),
         project: (projectId && projectName) ? getOption(projectId, projectName) : getOption(0, ""),
         milestone: (milestoneId && milestoneTitle) ? getOption(milestoneId, milestoneTitle) : getOption(0, ""),
         assignee: assigneeId || 0,

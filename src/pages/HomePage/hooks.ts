@@ -30,7 +30,7 @@ const useLoadDependentData: UseLoadDependentData = () => {
     const [entityIds, setEntityIds] = useState<string[]>([]);
 
     useInitialisedDeskproAppClient((client) => {
-        getEntityIssueListService(client, ticketId)
+        getEntityIssueListService(client, ticketId?? "")
             .then((entities) => {
                 if (Array.isArray(entities) && entities.length > 0) {
                     setEntityIds(entities);

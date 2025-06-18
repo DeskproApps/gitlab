@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-import { DivAsInputWithDisplay, Dropdown, DropdownTargetProps } from "@deskpro/deskpro-ui";
+import { DivAsInputWithDisplay, Dropdown, DropdownTargetProps, AnyIcon } from "@deskpro/deskpro-ui";
 import { Label } from "../../common";
 import type { FC } from "react";
 import type { Option } from "../../../types";
@@ -19,8 +19,8 @@ const ProjectField: FC<{
             showInternalSearch
             fetchMoreText={"Fetch more"}
             autoscrollText={"Autoscroll"}
-            selectedIcon={faCheck}
-            externalLinkIcon={faExternalLinkAlt}
+            selectedIcon={faCheck as AnyIcon}
+            externalLinkIcon={faExternalLinkAlt as AnyIcon}
             placement="bottom-start"
             hideIcons
             options={options.filter(({ label }) => {

@@ -4,6 +4,7 @@ import {
     Dropdown,
     Button as ButtonUI,
     DropdownTargetProps,
+    AnyIcon
 } from "@deskpro/deskpro-ui";
 import { getOption } from "../../../utils";
 import { IssueLabel, Label } from "../../common";
@@ -20,8 +21,8 @@ const LabelsField: FC<{
         <Dropdown
             fetchMoreText="Fetch more"
             autoscrollText="Autoscroll"
-            selectedIcon={faCheck}
-            externalLinkIcon={faExternalLinkAlt}
+            selectedIcon={faCheck as AnyIcon}
+            externalLinkIcon={faExternalLinkAlt as AnyIcon}
             placement="bottom-start"
             searchPlaceholder="Select value"
             options={labels.map((label) => ({
