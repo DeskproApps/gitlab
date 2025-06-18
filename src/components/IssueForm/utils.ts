@@ -39,7 +39,6 @@ const getInitValues = (params: InitParams = {}): FormInput => {
     const assigneeId = get(params, ["issue", "assignee", "id"]);
 
     const issueTypeKey = params?.issue?.issue_type;
-    // issueTypes?.[issueTypeKey?? "issue"] ?? getOption("issue", "Issue")
     return {
         title: get(params, ["issue", "title"], ""),
         description: get(params, ["issue", "description"], ""),

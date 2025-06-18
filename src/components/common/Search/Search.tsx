@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { faSearch, faTimes, faSpinner } from '@fortawesome/free-solid-svg-icons'
-import './Callout.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Input, IconButton } from '@deskpro/deskpro-ui'
 import { Label } from '../Label'

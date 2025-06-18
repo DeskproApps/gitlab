@@ -18,7 +18,7 @@ import {
     MilestoneField,
 } from "./fields";
 import type { FC } from "react";
-import type { Props, FormInput } from "./types";
+import type { Props } from "./types";
 
 const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }) => {
     const {
@@ -27,7 +27,9 @@ const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }
         register,
         formState: { errors, isSubmitting },
         handleSubmit,
-    } = useForm<FormInput>({
+        // @todo: Replace any with FormInput, The FormInput type needs to be refactored.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = useForm<any>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         defaultValues: getInitValues(params) as any,
         resolver: yupResolver(validationSchema),
@@ -40,8 +42,8 @@ const IssueForm: FC<Props> = ({ isEditMode = false, onSubmit, onCancel, params }
         milestone,
         assignee,
         labels,
-    // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
-    // @ts-ignore will fix in v8 https://github.com/react-hook-form/react-hook-form/issues/4055#issuecomment-1171531617
+        // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
+        // @ts-ignore will fix in v8 https://github.com/react-hook-form/react-hook-form/issues/4055#issuecomment-1171531617
     ] = watch(["title", "description", "type", "project", "milestone", "assignee", "labels"]);
 
     const {
