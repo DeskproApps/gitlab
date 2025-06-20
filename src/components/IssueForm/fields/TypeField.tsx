@@ -1,5 +1,5 @@
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-import { DivAsInputWithDisplay, Dropdown, DropdownTargetProps } from "@deskpro/deskpro-ui";
+import { AnyIcon, DivAsInputWithDisplay, Dropdown, DropdownTargetProps } from "@deskpro/deskpro-ui";
 import { getIssueTypes } from "../../../utils";
 import { Label } from "../../common";
 import type { FC } from "react";
@@ -15,8 +15,8 @@ const TypeField: FC<{
         <Dropdown
             fetchMoreText={"Fetch more"}
             autoscrollText={"Autoscroll"}
-            selectedIcon={faCheck}
-            externalLinkIcon={faExternalLinkAlt}
+            selectedIcon={faCheck as AnyIcon}
+            externalLinkIcon={faExternalLinkAlt as AnyIcon}
             placement="bottom-start"
             hideIcons
             options={Object.values(getIssueTypes()) as Array<Option<IssueType>>}
