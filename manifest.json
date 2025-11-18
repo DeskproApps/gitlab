@@ -102,7 +102,15 @@
       {
         "url": "__gitlab_instance_url__/.*",
         "methods": ["GET", "POST", "PUT"],
-        "timeout": 10
+        "timeout": 10,
+        "settingsInjection": {
+          "app_id": {
+            "querystring": ["client_id"]
+          },
+          "client_secret": {
+            "querystring": ["client_secret"]
+          }
+        }
       }
     ]
   }

@@ -4,7 +4,7 @@ export const placeholders = {
     gitlab_instance_url: "__gitlab_instance_url__",
     TOKEN: "[user[oauth2/token]]",
     TOKEN_PATH: "oauth2/token",
-};
+} as const;
 
 export const BASE_URL = "__gitlab_instance_url__";
 
