@@ -1,6 +1,7 @@
 {
   "name": "@deskpro-apps/gitlab",
   "version": "0.0.0",
+  "packageManager": "pnpm@9.15.4",
   "license": "BSD-3-Clause",
   "scripts": {
     "start": "vite",
