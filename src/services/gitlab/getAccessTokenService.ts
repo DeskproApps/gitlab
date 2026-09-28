@@ -11,13 +11,14 @@ const getAccessTokenService = async (
     return baseRequest<OAuthToken>(client, {
         rawUrl: `${placeholders.gitlab_instance_url}/oauth/token`,
         method: "POST",
-        queryParams: {
+        // Credentials go in the body: the apps proxy rejects backend-only settings in the query string
+        data: new URLSearchParams({
             grant_type: "authorization_code",
             client_id: placeholders.app_id,
             client_secret: placeholders.client_secret,
             code: accessCode,
             redirect_uri: callbackUrl,
-        },
+        }),
     });
 };
 
