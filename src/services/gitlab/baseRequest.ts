@@ -32,6 +32,12 @@ const baseRequest: Request = async (client, {
 
     if (data instanceof FormData) {
         options.body = data;
+    } else if (data instanceof URLSearchParams) {
+        options.body = data.toString();
+        options.headers = {
+            ...options.headers,
+            "Content-Type": "application/x-www-form-urlencoded",
+        };
     } else if (data) {
         options.body = JSON.stringify(data);
         options.headers = {
